@@ -4,6 +4,7 @@ import { Copy } from 'lucide-react';
 import { Message, Attachment } from '../types';
 import AttachmentsList from './AttachmentsList';
 import { isAudioFile } from '../utils';
+import ReactMarkdown from 'react-markdown';
 
 interface MessageBubbleProps {
   message: Message;
@@ -81,7 +82,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
             {message.isTyping ? (
               <span className="typing-indicator text-sm">{message.content}</span>
             ) : (
-              <div className="whitespace-pre-wrap text-sm">{message.content}</div>
+              <div className="markdown-content text-sm">
+                <ReactMarkdown className="prose prose-invert prose-sm max-w-none">
+                  {message.content}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         )}
@@ -96,8 +101,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
             setAudioElements={setAudioElements}
           />
         )}
-        
-        {/* Removed timestamps */}
       </div>
       
       {/* Copy button positioned outside the bubble - for agent messages (right side) */}

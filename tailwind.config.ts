@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -126,8 +125,68 @@ export default {
 				'bounce-in': 'bounce-in 0.3s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'timer-pulse': 'timer-blink 1.5s ease-in-out infinite'
+			},
+			typography: {
+				DEFAULT: {
+					css: {
+						color: 'inherit',
+						a: {
+							color: '#3b82f6',
+							'&:hover': {
+								color: '#60a5fa',
+							},
+						},
+						'h1,h2,h3,h4': {
+							color: 'inherit',
+							fontWeight: '600',
+						},
+						code: {
+							color: '#ef4444',
+							backgroundColor: 'rgba(0, 0, 0, 0.1)',
+							padding: '0.125rem 0.25rem',
+							borderRadius: '0.25rem',
+							fontWeight: '600',
+						},
+						'code::before': {
+							content: '""',
+						},
+						'code::after': {
+							content: '""',
+						},
+						pre: {
+							backgroundColor: 'rgba(0, 0, 0, 0.3)',
+							color: '#e5e7eb',
+							overflow: 'auto',
+							padding: '1rem',
+							borderRadius: '0.375rem',
+						},
+						blockquote: {
+							borderLeftColor: '#4b5563',
+						},
+						hr: {
+							borderColor: '#374151',
+						},
+						ol: {
+							li: {
+								'&::marker': {
+									color: '#6b7280',
+								}
+							}
+						},
+						ul: {
+							li: {
+								'&::marker': {
+									color: '#6b7280',
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		require('@tailwindcss/typography')
+	],
 } satisfies Config;
