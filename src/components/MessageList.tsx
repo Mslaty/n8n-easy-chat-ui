@@ -26,7 +26,7 @@ const MessageList: React.FC<MessageListProps> = ({
   }, [messages]);
   
   return (
-    <ScrollArea className="flex-1">
+    <ScrollArea className="flex-1 relative">
       <div className="pb-4 px-4">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-500 text-center">
