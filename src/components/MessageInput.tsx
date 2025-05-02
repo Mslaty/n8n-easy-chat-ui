@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, MicOff, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
@@ -121,7 +122,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
         const audioFile = await stopRecording();
         
         if (audioFile) {
-          const attachment: Attachment = {
+          // Automatically send the voice message
+          const voiceAttachment: Attachment = {
             id: generateId(),
             name: audioFile.name,
             type: audioFile.type,
@@ -129,7 +131,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
             size: audioFile.size,
           };
           
-          setAttachments(prev => [...prev, attachment]);
+          // Send the voice message immediately
+          onSendMessage('', [voiceAttachment]);
         }
       } else {
         await startRecording();
