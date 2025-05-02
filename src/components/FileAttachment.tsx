@@ -7,7 +7,7 @@ import {
   FileText, 
   FileArchive, 
   FileCode,
-  FilePen,
+  File,
   Download
 } from 'lucide-react';
 import { Attachment } from '../types';
@@ -36,7 +36,7 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
     } else if (type.includes('video')) {
       return <FileVideo size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
     } else if (type.includes('pdf')) {
-      return <FilePen size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+      return <File size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
     } else if (type.includes('zip') || type.includes('rar') || type.includes('tar') || type.includes('7z')) {
       return <FileArchive size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
     } else if (type.includes('html') || type.includes('css') || type.includes('javascript') || type.includes('json') || type.includes('xml')) {
