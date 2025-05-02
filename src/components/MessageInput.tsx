@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Send, Mic, Stop, File as FileIcon } from 'lucide-react';
+import { Paperclip, Send, Mic, Square, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
 import { generateId, createObjectURL, startRecording, stopRecording, isImageFile } from '../utils';
 
@@ -215,7 +216,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
               </div>
             )}
             <button type="button" onClick={handleRecordToggle} className={`p-2 rounded-full ${isRecording ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'} disabled:opacity-50`} disabled={!isConnected || isLoading} aria-label={isRecording ? 'Stop recording' : 'Start recording'}>
-              {isRecording ? <Stop size={20} /> : <Mic size={20} />}
+              {isRecording ? <Square size={20} /> : <Mic size={20} />}
             </button>
             
             <button type="submit" disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} aria-label="Send message" className="p-2 text-white hover:bg-chat-accent-hover rounded-full disabled:opacity-50 bg-transparent">
