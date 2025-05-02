@@ -2,11 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { Attachment } from '../types';
+import { Message, ChatSettings, Attachment } from '../types';
 import { useChatManagement } from '../hooks/useChatManagement';
 
 interface ChatContainerProps {
-  settings: any;
+  settings: ChatSettings;
   isConnected: boolean;
   onCopyMessage: (content: string) => void;
   onDownloadAttachment: (attachment: Attachment) => void;
