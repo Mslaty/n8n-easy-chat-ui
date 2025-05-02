@@ -20,6 +20,11 @@ export const saveMessages = async (messages: Message[], chatId: string): Promise
         try {
           // Always convert to base64 for persistent storage
           processed.url = await fileToBase64(attachment.data);
+          
+          // For images, also store the preview URL as the same base64 string
+          if (attachment.type.startsWith('image/')) {
+            processed.previewUrl = processed.url;
+          }
         } catch (err) {
           console.error('Failed to convert file to base64:', err);
         }

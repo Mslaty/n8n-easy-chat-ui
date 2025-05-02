@@ -12,7 +12,7 @@ const ImageAttachment: React.FC<ImageAttachmentProps> = ({
   attachment,
   onDownloadAttachment
 }) => {
-  // Use either the previewUrl, url property, or fallback to showing the name
+  // Use either the previewUrl or url property for display
   const imageUrl = attachment.previewUrl || attachment.url;
   
   // Only render the image if we have a valid URL
