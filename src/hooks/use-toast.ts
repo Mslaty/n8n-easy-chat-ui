@@ -5,7 +5,7 @@ import { toast as sonnerToast } from "sonner";
 export const toast = sonnerToast;
 
 // Types
-export type ToastProps = React.ComponentProps<typeof sonnerToast.Custom>;
+export type ToastProps = React.ComponentProps<typeof sonnerToast.custom>;
 
 export interface ToastActionElement {
   altText?: string;
