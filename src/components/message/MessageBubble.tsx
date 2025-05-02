@@ -30,15 +30,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   // Force update showActions state when message changes
   // and reset audio states to ensure clean UI
   useEffect(() => {
-    setShowActions(false);
     resetAudioStates();
     
-    // Set initial visibility on mount to make buttons available without mouse hover
-    const timer = setTimeout(() => {
-      setShowActions(true);
-    }, 500);
+    // Auto-show actions briefly when message appears
+    setShowActions(true);
+    const hideTimer = setTimeout(() => {
+      setShowActions(false);
+    }, 2000);
     
-    return () => clearTimeout(timer);
+    return () => clearTimeout(hideTimer);
   }, [message.id, resetAudioStates]);
 
   // Check if the message only contains voice attachments and no text content
@@ -63,30 +63,31 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   
   return (
     <div 
-      className="flex mb-4 relative group animate-fade-in"
+      className="flex mb-4 relative group"
       style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}
       onMouseEnter={() => setShowActions(true)} 
       onMouseLeave={() => setShowActions(false)}
       data-testid={`message-bubble-${message.id}`}
     >
-      
-      {/* Copy button for user messages (left side) */}
-      {isUser && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div 
-          className={`absolute left-0 -translate-x-2 top-1/2 transform -translate-y-1/2 transition-opacity duration-300 z-30 ${
-            showActions ? 'opacity-100' : 'opacity-0'
-          }`}
-          data-testid="copy-button-user"
-        >
-          <CopyButton position="left" onClick={handleCopyClick} />
-        </div>
-      )}
-      
       <div 
-        className={`rounded-lg px-4 py-3 max-w-[80%] break-words flex items-center ${
+        className={`rounded-lg px-4 py-3 max-w-[80%] break-words flex items-center relative ${
           isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         }`}
       >
+        {!message.isTyping && !isOnlyVoiceMessage() && (
+          <div 
+            className={`absolute transition-opacity duration-300 ${
+              showActions ? 'opacity-100' : 'opacity-0'
+            } ${isUser ? 'top-1 right-1' : 'top-1 left-1'}`}
+            data-testid={`copy-button-${isUser ? 'user' : 'agent'}`}
+          >
+            <CopyButton 
+              position={isUser ? 'right' : 'left'} 
+              onClick={handleCopyClick} 
+            />
+          </div>
+        )}
+        
         {message.content && (
           <div className={`w-full ${isUser ? 'text-center' : 'text-left'}`}>
             <MessageContent 
@@ -111,18 +112,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           />
         )}
       </div>
-      
-      {/* Copy button for agent messages (right side) */}
-      {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div 
-          className={`absolute right-0 translate-x-2 top-1/2 transform -translate-y-1/2 transition-opacity duration-300 z-30 ${
-            showActions ? 'opacity-100' : 'opacity-0'
-          }`}
-          data-testid="copy-button-agent"
-        >
-          <CopyButton position="right" onClick={handleCopyClick} />
-        </div>
-      )}
     </div>
   );
 };

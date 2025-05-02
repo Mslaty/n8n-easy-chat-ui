@@ -2,6 +2,7 @@
 import React from 'react';
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface CopyButtonProps {
   position: 'left' | 'right';
@@ -10,15 +11,22 @@ interface CopyButtonProps {
 
 const CopyButton: React.FC<CopyButtonProps> = ({ position, onClick }) => {
   return (
-    <Button 
-      onClick={onClick} 
-      variant="ghost" 
-      size="icon"
-      className="bg-chat-dark-secondary hover:bg-gray-700 text-gray-400 hover:text-white p-1 h-auto w-auto z-20" 
-      aria-label="Copy message"
-    >
-      <Copy size={14} />
-    </Button>
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Button 
+          onClick={onClick} 
+          variant="ghost" 
+          size="icon"
+          className="bg-chat-dark-secondary/80 hover:bg-gray-700 text-gray-400 hover:text-white p-1 h-auto w-auto rounded-full absolute z-30" 
+          aria-label="Copy message"
+        >
+          <Copy size={14} />
+        </Button>
+      </HoverCardTrigger>
+      <HoverCardContent className="py-1 px-2 text-xs">
+        Copy message
+      </HoverCardContent>
+    </HoverCard>
   );
 };
 
