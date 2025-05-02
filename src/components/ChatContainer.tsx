@@ -67,19 +67,21 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
   
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden">
       <MessageList 
         messages={messages}
         onCopyMessage={onCopyMessage}
         onDownloadAttachment={onDownloadAttachment}
       />
       
-      <MessageInput 
-        onSendMessage={handleSendMessage}
-        isConnected={isConnected}
-        isLoading={isLoading}
-      />
-    </>
+      <div className="z-10">
+        <MessageInput 
+          onSendMessage={handleSendMessage}
+          isConnected={isConnected}
+          isLoading={isLoading}
+        />
+      </div>
+    </div>
   );
 };
 
