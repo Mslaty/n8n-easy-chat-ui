@@ -43,7 +43,6 @@ const Index = () => {
           duration: 2000,
           className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
           position: "bottom-right",
-          variant: "destructive"
         });
       });
   };
@@ -74,9 +73,10 @@ const Index = () => {
             // Close the settings modal
             setIsSettingsOpen(false);
             
-            toast({
-              title: "Success",
-              description: "Chat history imported successfully"
+            toast("Chat history imported successfully", {
+              duration: 2000,
+              className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+              position: "bottom-right",
             });
             
             // Force reload to load the new chat history
@@ -84,10 +84,10 @@ const Index = () => {
           }
         } catch (error) {
           console.error('Failed to import chat history:', error);
-          toast({
-            title: "Error",
-            description: "Failed to import chat history",
-            variant: "destructive"
+          toast("Failed to import chat history", {
+            duration: 2000,
+            className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
+            position: "bottom-right",
           });
         }
       }

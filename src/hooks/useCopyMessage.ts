@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { toast as sonnerToast } from 'sonner';
+import { toast } from 'sonner';
 
 export const useCopyMessage = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -10,7 +11,7 @@ export const useCopyMessage = () => {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(content).then(() => {
           // Use sonner toast for a more compact, semi-transparent dark notification
-          sonnerToast("Copied to clipboard", {
+          toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
             position: "bottom-right",
@@ -24,7 +25,7 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Failed to copy message:', err);
-      sonnerToast.error("Failed to copy", {
+      toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
@@ -45,7 +46,7 @@ export const useCopyMessage = () => {
       const successful = document.execCommand('copy');
       if (successful) {
         // Use sonner toast instead of shadcn toast for consistency
-        sonnerToast("Copied to clipboard", {
+        toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
           position: "bottom-right",
@@ -55,7 +56,7 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Fallback: Could not copy text: ', err);
-      sonnerToast.error("Failed to copy", {
+      toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
@@ -73,7 +74,7 @@ export const useCopyMessage = () => {
           setCopiedCode(code);
           
           // Use sonner toast for a more compact, semi-transparent dark notification
-          sonnerToast("Copied to clipboard", {
+          toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
             position: "bottom-right",
@@ -92,7 +93,7 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Failed to copy code:', err);
-      sonnerToast.error("Failed to copy", {
+      toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
@@ -113,7 +114,7 @@ export const useCopyMessage = () => {
       if (successful) {
         setCopiedCode(code);
         // Use sonner toast for a more compact, semi-transparent dark notification
-        sonnerToast("Copied to clipboard", {
+        toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
           position: "bottom-right",
@@ -128,7 +129,7 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Fallback: Could not copy code: ', err);
-      sonnerToast.error("Failed to copy", {
+      toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
