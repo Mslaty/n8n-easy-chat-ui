@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, Square, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
@@ -204,7 +205,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onDragLeave={handleDragLeave} 
         onDrop={handleFileDrop}
       >
-        <div className="flex bg-chat-dark-secondary rounded-t-lg mx-[50px] px-[5px] my-0 py-[5px]">
+        <div className="flex bg-chat-dark-secondary rounded-t-lg mx-[50px] px-[5px] my-0 py-[5px] border border-gray-700">
           {/* Left side (attachment button) - vertically aligned to the top */}
           <div className="flex pt-2 items-start">
             <button 
