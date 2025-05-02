@@ -100,7 +100,7 @@
 }
 
 .drag-over {
-  @apply border-dashed border-2 border-chat-accent bg-chat-dark/50;
+  @apply border-dashed border-2 border-chat-accent bg-chat-dark/50 rounded-t-lg;
 }
 
 .message-appear {

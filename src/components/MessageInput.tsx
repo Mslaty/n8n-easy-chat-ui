@@ -154,7 +154,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   }, [message]);
   
   return (
-    <div className="p-4 border-t border-gray-800">
+    <div className="p-4 border-t border-gray-800 sticky bottom-0 bg-chat-dark">
       {attachments.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-3">
           {attachments.map(attachment => (
@@ -193,7 +193,19 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleFileDrop}
       >
-        <div className="flex items-end bg-chat-dark-secondary rounded-lg">
+        <div className="flex items-end bg-chat-dark-secondary rounded-t-lg">
+          <div className="flex items-center p-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50"
+              disabled={!isConnected || isLoading}
+              aria-label="Attach file"
+            >
+              <Paperclip size={20} />
+            </button>
+          </div>
+          
           <div className="flex-1">
             <textarea
               ref={textareaRef}
@@ -207,16 +219,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </div>
           
           <div className="flex items-center p-2 space-x-1">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50"
-              disabled={!isConnected || isLoading}
-              aria-label="Attach file"
-            >
-              <Paperclip size={20} />
-            </button>
-            
             <button
               type="button"
               onClick={handleRecordToggle}
