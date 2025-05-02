@@ -149,7 +149,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   // Loading animation for agent typing
   const LoadingDots = () => {
     return (
-      <div className="flex items-center space-x-2 justify-center w-full">
+      <div className="flex items-center space-x-2">
         <CircleEllipsis size={20} className="text-chat-accent animate-pulse" />
         <div className="flex space-x-1">
           <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -181,20 +181,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       <div 
         className={`rounded-lg px-4 py-2 max-w-[80%] break-words ${
           isUser ? 'bg-chat-user-bubble text-white' : 'bg-chat-agent-bubble text-gray-200'
-        } ${isTyping ? 'animate-pulse' : ''} flex justify-center items-center text-center`}
+        } ${isTyping ? 'animate-pulse' : ''}`}
       >
         {message.content && message.content === 'Agent is typing...' ? (
           <LoadingDots />
         ) : message.content && (
-          <div className="mb-2 w-full flex justify-center">
+          <div className="mb-2">
             {isTyping ? (
-              <div className="text-sm typing-animation text-center">
+              <div className="text-sm typing-animation">
                 {displayedText}
                 <span className="typing-cursor">|</span>
               </div>
             ) : (
-              <div className="markdown-content text-sm text-center w-full">
-                <ReactMarkdown className="prose prose-invert prose-sm max-w-none text-center" components={components}>
+              <div className="markdown-content text-sm">
+                <ReactMarkdown className="prose prose-invert prose-sm max-w-none" components={components}>
                   {message.content}
                 </ReactMarkdown>
               </div>
