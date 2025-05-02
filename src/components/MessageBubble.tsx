@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, CopyCheck, CircleEllipsis } from 'lucide-react';
 import { Message, Attachment } from '../types';
@@ -33,6 +32,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   
   // Handle typing animation effect when message changes
   useEffect(() => {
+    // If the message is "Agent is typing...", we don't need any typing animation
+    if (message.content === 'Agent is typing...') {
+      setDisplayedText(message.content);
+      setIsTyping(false);
+      return;
+    }
+    
+    // Check if this is a new message that should have typing animation
     // Only apply typing animation to agent messages that have the isTyping flag
     if (message.isTyping && !isUser && message.content) {
       setIsTyping(true);
@@ -54,7 +61,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       
       return () => clearInterval(interval);
     } else {
-      // For regular messages, just show the full content
+      // For regular messages or existing messages on page reload, just show the full content
       setDisplayedText(message.content || '');
       setIsTyping(false);
     }
@@ -149,7 +156,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   // Loading animation for agent typing
   const LoadingDots = () => {
     return (
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-center space-x-2">
         <CircleEllipsis size={20} className="text-chat-accent animate-pulse" />
         <div className="flex space-x-1">
           <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -179,14 +186,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       )}
       
       <div 
-        className={`rounded-lg px-4 py-2 max-w-[80%] break-words ${
+        className={`rounded-lg px-4 py-2 max-w-[80%] break-words flex items-center justify-center ${
           isUser ? 'bg-chat-user-bubble text-white' : 'bg-chat-agent-bubble text-gray-200'
-        } ${isTyping ? 'animate-pulse' : ''}`}
+        } ${message.content === 'Agent is typing...' ? 'animate-pulse' : ''}`}
       >
         {message.content && message.content === 'Agent is typing...' ? (
           <LoadingDots />
         ) : message.content && (
-          <div className="mb-2">
+          <div className="mb-2 w-full text-center">
             {isTyping ? (
               <div className="text-sm typing-animation">
                 {displayedText}

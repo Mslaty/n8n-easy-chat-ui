@@ -23,7 +23,12 @@ const Index = () => {
   
   // Load chat history from localStorage on mount
   useEffect(() => {
-    const savedMessages = getMessages(settings.chatId);
+    // Load saved messages but make sure they don't have isTyping set
+    const savedMessages = getMessages(settings.chatId).map(msg => ({
+      ...msg,
+      isTyping: false // Ensure loaded messages don't have typing animation
+    }));
+    
     if (savedMessages.length > 0) {
       setMessages(savedMessages);
     }
@@ -88,6 +93,7 @@ const Index = () => {
         sender: 'agent',
         timestamp: Date.now(),
         // If typing animation is enabled, mark this message for animation
+        // This is a new message, so it should have typing animation if enabled
         isTyping: settings.typingAnimation
       };
       
