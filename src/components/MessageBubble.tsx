@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { Message, Attachment } from '../types';
 import { formatFileSize, isImageFile, isAudioFile } from '../utils';
 import { File, Copy, Download, Play, Pause, Music } from 'lucide-react';
+
 interface MessageBubbleProps {
   message: Message;
   onCopyMessage: (content: string) => void;
   onDownloadAttachment: (attachment: Attachment) => void;
 }
+
 const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
   onCopyMessage,
@@ -126,4 +127,5 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       </div>
     </div>;
 };
+
 export default MessageBubble;
