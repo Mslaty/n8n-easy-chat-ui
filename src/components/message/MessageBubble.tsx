@@ -20,7 +20,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onCopyMessage,
   onDownloadAttachment
 }) => {
-  const [showActions, setShowActions] = useState(false);
+  const [showActions, setShowActions] = useState(true); // Always show actions by default
   const isUser = message.sender === 'user';
   
   const { playingAudio, setPlayingAudio, audioElements, setAudioElements, resetAudioStates } = useAudioElements();
@@ -68,10 +68,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         {/* Only show copy button for agent messages */}
         {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
           <div 
-            className={`absolute top-1 right-1 transition-opacity duration-300 ${
-              showActions ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ display: 'block' }} // Force display to ensure button is always in DOM
+            className={`absolute top-1 right-1 opacity-100`}
+            style={{ display: 'block' }}
             data-testid="copy-button-agent"
           >
             <CopyButton 
