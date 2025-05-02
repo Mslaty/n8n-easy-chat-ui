@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 export const useCopyMessage = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -14,7 +14,6 @@ export const useCopyMessage = () => {
           toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-            position: "bottom-right",
           });
         }).catch(err => {
           console.error('Failed to copy with Clipboard API:', err);
@@ -28,7 +27,6 @@ export const useCopyMessage = () => {
       toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-        position: "bottom-right",
       });
     }
   };
@@ -48,7 +46,6 @@ export const useCopyMessage = () => {
         toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-          position: "bottom-right",
         });
       } else {
         throw new Error('Copy command was unsuccessful');
@@ -58,7 +55,6 @@ export const useCopyMessage = () => {
       toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-        position: "bottom-right",
       });
     } finally {
       document.body.removeChild(textarea);
@@ -75,7 +71,6 @@ export const useCopyMessage = () => {
           toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-            position: "bottom-right",
           });
           
           // Reset copied state after 2 seconds
@@ -94,7 +89,6 @@ export const useCopyMessage = () => {
       toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-        position: "bottom-right",
       });
     }
   };
@@ -114,7 +108,6 @@ export const useCopyMessage = () => {
         toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-          position: "bottom-right",
         });
         
         // Reset copied state after 2 seconds
@@ -129,7 +122,6 @@ export const useCopyMessage = () => {
       toast("Failed to copy", {
         duration: 2000,
         className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-        position: "bottom-right",
       });
     } finally {
       document.body.removeChild(textarea);

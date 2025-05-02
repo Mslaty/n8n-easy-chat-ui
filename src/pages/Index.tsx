@@ -10,7 +10,7 @@ import {
   importChatHistory
 } from '../utils';
 import { downloadAttachment } from '../utils/attachmentHandlers';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 import { useCopyMessage } from '@/hooks/useCopyMessage';
 
 const Index = () => {
@@ -63,7 +63,6 @@ const Index = () => {
             toast("Chat history imported successfully", {
               duration: 2000,
               className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-              position: "bottom-right",
             });
             
             // Force reload to load the new chat history
@@ -74,7 +73,6 @@ const Index = () => {
           toast("Failed to import chat history", {
             duration: 2000,
             className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-            position: "bottom-right",
           });
         }
       }
