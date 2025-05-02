@@ -1,6 +1,6 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from 'sonner';
 
 export const useCopyMessage = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -11,9 +11,11 @@ export const useCopyMessage = () => {
       // Modern approach using Clipboard API with fallback to execCommand
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(content).then(() => {
-          toast({
-            title: "Copied!",
-            description: "Message copied to clipboard"
+          // Use sonner toast for a more compact, semi-transparent dark notification
+          sonnerToast("Copied to clipboard", {
+            duration: 2000,
+            className: "bg-black/70 text-white text-xs py-1 px-2",
+            position: "bottom-right",
           });
         }).catch(err => {
           console.error('Failed to copy with Clipboard API:', err);
@@ -24,10 +26,10 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Failed to copy message:', err);
-      toast({
-        title: "Error",
-        description: "Failed to copy to clipboard",
-        variant: "destructive"
+      sonnerToast.error("Failed to copy", {
+        duration: 2000,
+        className: "bg-black/70 text-white text-xs py-1 px-2",
+        position: "bottom-right",
       });
     }
   };
@@ -69,9 +71,12 @@ export const useCopyMessage = () => {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(code).then(() => {
           setCopiedCode(code);
-          toast({
-            title: "Copied!",
-            description: "Code copied to clipboard"
+          
+          // Use sonner toast for a more compact, semi-transparent dark notification
+          sonnerToast("Copied to clipboard", {
+            duration: 2000,
+            className: "bg-black/70 text-white text-xs py-1 px-2",
+            position: "bottom-right",
           });
           
           // Reset copied state after 2 seconds
@@ -87,10 +92,10 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Failed to copy code:', err);
-      toast({
-        title: "Error",
-        description: "Failed to copy code to clipboard",
-        variant: "destructive"
+      sonnerToast.error("Failed to copy", {
+        duration: 2000,
+        className: "bg-black/70 text-white text-xs py-1 px-2",
+        position: "bottom-right",
       });
     }
   };
@@ -107,9 +112,11 @@ export const useCopyMessage = () => {
       const successful = document.execCommand('copy');
       if (successful) {
         setCopiedCode(code);
-        toast({
-          title: "Copied!",
-          description: "Code copied to clipboard"
+        // Use sonner toast for a more compact, semi-transparent dark notification
+        sonnerToast("Copied to clipboard", {
+          duration: 2000,
+          className: "bg-black/70 text-white text-xs py-1 px-2",
+          position: "bottom-right",
         });
         
         // Reset copied state after 2 seconds
@@ -121,10 +128,10 @@ export const useCopyMessage = () => {
       }
     } catch (err) {
       console.error('Fallback: Could not copy code: ', err);
-      toast({
-        title: "Error",
-        description: "Failed to copy code to clipboard",
-        variant: "destructive"
+      sonnerToast.error("Failed to copy", {
+        duration: 2000,
+        className: "bg-black/70 text-white text-xs py-1 px-2",
+        position: "bottom-right",
       });
     } finally {
       document.body.removeChild(textarea);
