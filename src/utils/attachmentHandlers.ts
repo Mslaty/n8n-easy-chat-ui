@@ -1,6 +1,6 @@
 
 import { Attachment } from '../types';
-import { createObjectURL, revokeObjectURL } from './index';
+import { createObjectURL, revokeObjectURL } from './fileUtils';
 
 export const downloadAttachment = (attachment: Attachment): void => {
   if (attachment.url) {
