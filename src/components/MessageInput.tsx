@@ -128,7 +128,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [message]);
-  return <div className="p-4 border-t border-gray-800 sticky bottom-0 bg-chat-dark py-0">
+  return <div className="">
       {attachments.length > 0 && <div className="flex flex-wrap gap-2 mb-3">
           {attachments.map(attachment => <div key={attachment.id} className="relative group">
               <div className="flex items-center bg-gray-800 rounded p-1.5 pr-8">
