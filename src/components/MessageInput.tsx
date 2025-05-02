@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Send, Mic, MicOff } from 'lucide-react';
+import { Paperclip, Send, Mic, MicOff, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
 import { generateId, createObjectURL, startRecording, stopRecording, isImageFile } from '../utils';
 
@@ -166,7 +165,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                   />
                 ) : (
                   <div className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center mr-2">
-                    <File size={16} className="text-gray-400" />
+                    <FileIcon size={16} className="text-gray-400" />
                   </div>
                 )}
                 <span className="text-sm text-gray-300 truncate max-w-[150px]">
