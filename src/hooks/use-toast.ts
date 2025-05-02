@@ -1,11 +1,11 @@
 
-import { Toast, toast as sonnerToast } from "sonner";
+import { toast as sonnerToast } from "sonner";
 
 // Re-export toast function
 export const toast = sonnerToast;
 
 // Types
-export type ToastProps = React.ComponentProps<typeof Toast>;
+export type ToastProps = React.ComponentProps<typeof sonnerToast.Custom>;
 
 export interface ToastActionElement {
   altText?: string;
