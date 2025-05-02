@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sonner';
 
 export const useCopyMessage = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export const useCopyMessage = () => {
       console.error('Failed to copy message:', err);
       toast("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+        className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     }
@@ -45,7 +45,6 @@ export const useCopyMessage = () => {
     try {
       const successful = document.execCommand('copy');
       if (successful) {
-        // Use sonner toast instead of shadcn toast for consistency
         toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
@@ -58,7 +57,7 @@ export const useCopyMessage = () => {
       console.error('Fallback: Could not copy text: ', err);
       toast("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+        className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     } finally {
@@ -73,7 +72,6 @@ export const useCopyMessage = () => {
         navigator.clipboard.writeText(code).then(() => {
           setCopiedCode(code);
           
-          // Use sonner toast for a more compact, semi-transparent dark notification
           toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
@@ -95,7 +93,7 @@ export const useCopyMessage = () => {
       console.error('Failed to copy code:', err);
       toast("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+        className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     }
@@ -113,7 +111,6 @@ export const useCopyMessage = () => {
       const successful = document.execCommand('copy');
       if (successful) {
         setCopiedCode(code);
-        // Use sonner toast for a more compact, semi-transparent dark notification
         toast("Copied to clipboard", {
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
@@ -131,7 +128,7 @@ export const useCopyMessage = () => {
       console.error('Fallback: Could not copy code: ', err);
       toast("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+        className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     } finally {
