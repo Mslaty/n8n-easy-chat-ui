@@ -60,7 +60,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       
       {/* Copy button positioned outside the bubble - for user messages (left side) */}
       {isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div className="absolute left-0 top-1/2 transform -translate-x-3 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute left-0 top-1/2 transform -translate-x-10px -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             onClick={handleCopy} 
             className="text-xs text-gray-400 p-1 hover:text-white rounded bg-chat-dark-secondary" 
@@ -111,7 +111,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       
       {/* Copy button positioned outside the bubble - for agent messages (right side) */}
       {!isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div className="absolute right-0 top-1/2 transform translate-x-3 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute right-0 top-1/2 transform translate-x-10px -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             onClick={handleCopy} 
             className="text-xs text-gray-400 p-1 hover:text-white rounded bg-chat-dark-secondary" 
