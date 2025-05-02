@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Copy } from 'lucide-react';
 import { Message, Attachment } from '../types';
 import AttachmentsList from './AttachmentsList';
+import { isAudioFile } from '../utils';
 
 interface MessageBubbleProps {
   message: Message;
@@ -25,6 +26,19 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   
   const handleCopy = () => {
     onCopyMessage(message.content);
+  };
+
+  // Check if the message only contains voice attachments and no text content
+  const isOnlyVoiceMessage = () => {
+    if (!message.attachments || message.attachments.length === 0) return false;
+    
+    // Check if all attachments are audio files
+    const hasOnlyAudioAttachments = message.attachments.every(attachment => 
+      attachment.data && isAudioFile(attachment.data)
+    );
+    
+    // Return true if has only audio attachments and no text content
+    return hasOnlyAudioAttachments && (!message.content || message.content.trim() === '');
   };
 
   // Cleanup audio elements on component unmount
@@ -69,7 +83,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           />
         )}
         
-        {showActions && !message.isTyping && (
+        {/* Only show copy button if not a voice-only message and not typing */}
+        {showActions && !message.isTyping && !isOnlyVoiceMessage() && (
           <div className="flex justify-end mt-1">
             <button 
               onClick={handleCopy} 
