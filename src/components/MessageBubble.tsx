@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Message, Attachment } from '../types';
 import { formatFileSize, isImageFile, isAudioFile } from '../utils';
-import { File, Copy, Download, Play, Pause, Volume2 } from 'lucide-react';
+import { File, Copy, Download, Play, Pause } from 'lucide-react';
 
 interface MessageBubbleProps {
   message: Message;
@@ -139,15 +139,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center">
-                      <Volume2 size={14} className="text-gray-400 mr-1" />
-                      <button 
-                        onClick={() => onDownloadAttachment(attachment)}
-                        className="p-1 text-gray-400 hover:text-white"
-                      >
-                        <Download size={16} />
-                      </button>
-                    </div>
+                    <button 
+                      onClick={() => onDownloadAttachment(attachment)}
+                      className="p-1 text-gray-400 hover:text-white"
+                    >
+                      <Download size={16} />
+                    </button>
                   </div>
                 ) : (
                   <div className="flex items-center p-2 bg-gray-800 bg-opacity-30">
