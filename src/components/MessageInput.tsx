@@ -2,13 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, MicOff, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
 import { generateId, createObjectURL, startRecording, stopRecording, isImageFile } from '../utils';
-
 interface MessageInputProps {
   onSendMessage: (message: string, attachments: Attachment[]) => void;
   isConnected: boolean;
   isLoading: boolean;
 }
-
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
   isConnected,
@@ -20,7 +18,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() && attachments.length === 0) return;
@@ -28,7 +25,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     setMessage('');
     setAttachments([]);
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Send message if Enter is pressed without Shift key
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -38,7 +34,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       }
     }
   };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newAttachments: Attachment[] = [];
@@ -69,7 +64,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       fileInputRef.current.value = '';
     }
   };
-
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -97,20 +91,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
       setAttachments(prev => [...prev, ...newAttachments]);
     }
   };
-
   const removeAttachment = (id: string) => {
     setAttachments(prev => prev.filter(a => a.id !== id));
   };
-
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
-
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-
   const handleRecordToggle = async () => {
     try {
       if (isRecording) {
@@ -147,7 +137,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [message]);
-
   return <div className="">
       {attachments.length > 0 && <div className="flex flex-wrap gap-2 mb-3">
           {attachments.map(attachment => <div key={attachment.id} className="relative group">
@@ -166,7 +155,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         </div>}
       
       <form onSubmit={handleSubmit} className={`relative ${isDragging ? 'drag-over' : ''}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleFileDrop}>
-        <div className="flex items-end bg-chat-dark-secondary rounded-t-lg px-0 mx-[50px]">
+        <div className="flex items-end bg-chat-dark-secondary rounded-t-lg mx-[50px] px-[5px] my-0 py-[5px]">
           <div className="flex items-center p-2">
             <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50" disabled={!isConnected || isLoading} aria-label="Attach file">
               <Paperclip size={20} />
@@ -174,16 +163,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </div>
           
           <div className="flex-1">
-            <textarea 
-              ref={textareaRef} 
-              value={message} 
-              onChange={e => setMessage(e.target.value)} 
-              onKeyDown={handleKeyDown}
-              placeholder="Write your message..." 
-              className="w-full bg-transparent text-white placeholder-gray-500 p-3 outline-none resize-none max-h-32" 
-              rows={1} 
-              disabled={!isConnected || isLoading} 
-            />
+            <textarea ref={textareaRef} value={message} onChange={e => setMessage(e.target.value)} onKeyDown={handleKeyDown} placeholder="Write your message..." className="w-full bg-transparent text-white placeholder-gray-500 p-3 outline-none resize-none max-h-32" rows={1} disabled={!isConnected || isLoading} />
           </div>
           
           <div className="flex items-center p-2 space-x-1">
@@ -205,5 +185,4 @@ const MessageInput: React.FC<MessageInputProps> = ({
       </form>
     </div>;
 };
-
 export default MessageInput;
