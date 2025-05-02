@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Message, Attachment } from '../../types';
 import AttachmentsList from '../AttachmentsList';
 import { isAudioFile } from '../../utils';
@@ -27,6 +27,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const { displayedText, isTyping } = useTypingAnimation(message, isUser);
   const { copiedCode, handleCopy, handleCopyCode } = useCopyMessage();
 
+  // Force update showActions state when message changes
+  useEffect(() => {
+    // Reset the show actions state when new messages are added
+    setShowActions(false);
+  }, [message.id]);
+
   // Check if the message only contains voice attachments and no text content
   const isOnlyVoiceMessage = () => {
     if (!message.attachments || message.attachments.length === 0) return false;
@@ -48,13 +54,17 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   };
   
   return (
-    <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in group relative`}
-         onMouseEnter={() => setShowActions(true)} 
-         onMouseLeave={() => setShowActions(false)}>
+    <div 
+      className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in group relative`}
+      onMouseEnter={() => setShowActions(true)} 
+      onMouseLeave={() => setShowActions(false)}
+    >
       
       {/* Copy button for user messages (left side) */}
-      {isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
-        <CopyButton position="left" onClick={handleCopyClick} />
+      {isUser && !message.isTyping && !isOnlyVoiceMessage() && (
+        <div className={`absolute left-0 -translate-x-2 top-1/2 transform -translate-y-1/2 ${showActions ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 z-20`}>
+          <CopyButton position="left" onClick={handleCopyClick} />
+        </div>
       )}
       
       <div 
@@ -88,8 +98,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       </div>
       
       {/* Copy button for agent messages (right side) */}
-      {!isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
-        <CopyButton position="right" onClick={handleCopyClick} />
+      {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
+        <div className={`absolute right-0 translate-x-2 top-1/2 transform -translate-y-1/2 ${showActions ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 z-20`}>
+          <CopyButton position="right" onClick={handleCopyClick} />
+        </div>
       )}
     </div>
   );

@@ -7,6 +7,11 @@ export const useAudioElements = () => {
     [key: string]: HTMLAudioElement;
   }>({});
 
+  // Reset function to clear all audio states
+  const resetAudioStates = () => {
+    setPlayingAudio(null);
+  };
+
   // Cleanup audio elements on component unmount
   useEffect(() => {
     return () => {
@@ -23,6 +28,7 @@ export const useAudioElements = () => {
     playingAudio,
     setPlayingAudio,
     audioElements,
-    setAudioElements
+    setAudioElements,
+    resetAudioStates
   };
 };
