@@ -185,7 +185,7 @@ export const isImageFile = (file: File | null | undefined): boolean => {
 
 // Check if an attachment is an audio file
 export const isAudioFile = (attachment: Attachment): boolean => {
-  // Check both the data property and the type string
+  // Check both type string and data property
   if (attachment.data) {
     return attachment.data.type.startsWith('audio/');
   }

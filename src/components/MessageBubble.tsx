@@ -34,7 +34,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     
     // Check if all attachments are audio files
     const hasOnlyAudioAttachments = message.attachments.every(attachment => 
-      attachment.data && isAudioFile(attachment.data)
+      isAudioFile(attachment)
     );
     
     // Return true if has only audio attachments and no text content
