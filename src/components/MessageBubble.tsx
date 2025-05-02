@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Message, Attachment } from '../types';
 import { formatFileSize, isImageFile, isAudioFile } from '../utils';
-import { File, Copy, Download, Play, Pause } from 'lucide-react';
+import { File, Copy, Download, Play, Pause, Music } from 'lucide-react';
 interface MessageBubbleProps {
   message: Message;
   onCopyMessage: (content: string) => void;
@@ -88,16 +89,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                       {playingAudio === (attachment.id || '') ? <Pause size={16} /> : <Play size={16} />}
                     </button>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm truncate">{attachment.name}</div>
-                      {attachment.size && <div className="text-xs text-gray-400">
-                          {formatFileSize(attachment.size)}
-                        </div>}
+                      <div className="text-sm truncate">Voice message</div>
                     </div>
                     <button onClick={() => onDownloadAttachment(attachment)} className="p-1 text-gray-400 hover:text-white">
                       <Download size={16} />
                     </button>
                   </div> : <div className="flex items-center p-0 bg-opacity-30 bg-transparent">
-                    <File size={18} className="text-gray-400 mr-2" />
+                    <Music size={18} className="text-gray-400 mr-2" />
                     <div className="flex-1 min-w-0">
                       <div className="text-sm truncate">{attachment.name}</div>
                       {attachment.size && <div className="text-xs text-gray-400">
