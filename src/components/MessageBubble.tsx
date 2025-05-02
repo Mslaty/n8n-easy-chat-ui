@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, CopyCheck } from 'lucide-react';
 import { Message, Attachment } from '../types';
@@ -42,10 +41,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       
       // Start the typing animation
       const interval = setInterval(() => {
-        if (index < content.length) {
-          setDisplayedText((prev) => prev + content.charAt(index));
-          index++;
-        } else {
+        setDisplayedText(content.substring(0, index + 1));
+        index++;
+        
+        if (index >= content.length) {
           clearInterval(interval);
           setIsTyping(false);
         }
