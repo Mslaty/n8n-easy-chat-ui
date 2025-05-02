@@ -1,3 +1,4 @@
+
 import { Message, Attachment, ChatSettings, ChatHistoryData } from '../types';
 
 // Generate a unique ID
@@ -97,7 +98,7 @@ export const getSettings = (): ChatSettings => {
     webhookUrl: '',
     typingAnimation: true,
     chatId: generateId(),
-    chatName: 'Chat name lorem ipsum'
+    chatName: 'Chat with n8n'
   };
   
   const savedSettings = localStorage.getItem('chatSettings');
