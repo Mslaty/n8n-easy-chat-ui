@@ -54,13 +54,27 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   }, [audioElements]);
   
   return (
-    <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} message-appear`}>
+    <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} message-appear group relative`}
+         onMouseEnter={() => setShowActions(true)} 
+         onMouseLeave={() => setShowActions(false)}>
+      
+      {/* Copy button positioned outside the bubble - for agent messages (left side) */}
+      {!isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
+        <div className="absolute left-0 top-1/2 transform -translate-x-8 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            onClick={handleCopy} 
+            className="text-xs text-gray-400 p-1 hover:text-white rounded bg-chat-dark-secondary" 
+            aria-label="Copy message"
+          >
+            <Copy size={14} />
+          </button>
+        </div>
+      )}
+      
       <div 
         className={`rounded-lg px-4 py-2 max-w-[80%] break-words ${
           isUser ? 'bg-chat-user-bubble text-white' : 'bg-chat-agent-bubble text-gray-200'
-        } ${message.isTyping ? 'animate-pulse' : ''}`} 
-        onMouseEnter={() => setShowActions(true)} 
-        onMouseLeave={() => setShowActions(false)}
+        } ${message.isTyping ? 'animate-pulse' : ''}`}
       >
         {message.content && (
           <div className="mb-2">
@@ -83,19 +97,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           />
         )}
         
-        {/* Only show copy button if not a voice-only message and not typing */}
-        {showActions && !message.isTyping && !isOnlyVoiceMessage() && (
-          <div className="flex justify-end mt-1">
-            <button 
-              onClick={handleCopy} 
-              className="text-xs text-gray-400 p-1 hover:text-white" 
-              aria-label="Copy message"
-            >
-              <Copy size={14} />
-            </button>
-          </div>
-        )}
-        
         <div className="text-xs text-gray-500 mt-1 text-right">
           {message.timestamp && (
             <span>
@@ -107,6 +108,19 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           )}
         </div>
       </div>
+      
+      {/* Copy button positioned outside the bubble - for user messages (right side) */}
+      {isUser && showActions && !message.isTyping && !isOnlyVoiceMessage() && (
+        <div className="absolute right-0 top-1/2 transform translate-x-8 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            onClick={handleCopy} 
+            className="text-xs text-gray-400 p-1 hover:text-white rounded bg-chat-dark-secondary" 
+            aria-label="Copy message"
+          >
+            <Copy size={14} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
