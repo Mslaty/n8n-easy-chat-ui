@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
@@ -73,7 +74,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         onDownloadAttachment={onDownloadAttachment}
       />
       
-      <div className="bg-chat-dark w-full">
+      <div className="bg-chat-dark">
         <MessageInput 
           onSendMessage={handleSendMessage}
           isConnected={isConnected}
