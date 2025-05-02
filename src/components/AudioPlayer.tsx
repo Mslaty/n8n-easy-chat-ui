@@ -76,17 +76,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
   
   return (
-    <div className="flex items-center bg-opacity-30 bg-transparent px-3 py-3">
+    <div className="flex items-center justify-center bg-opacity-30 bg-transparent py-2 px-2 max-w-xs">
       <button 
         onClick={toggleAudioPlayback} 
-        className="p-2.5 rounded-full mr-4 text-white bg-white/[0.17] flex-shrink-0"
+        className="p-2 rounded-full mr-3 text-white bg-white/[0.17] flex-shrink-0"
       >
-        {playingAudio === attachmentId ? <Pause size={16} /> : <Play size={16} />}
+        {playingAudio === attachmentId ? <Pause size={14} /> : <Play size={14} />}
       </button>
       
-      <div className="flex-1 min-w-0 flex items-center">
-        <div className="text-sm truncate">Voice message</div>
-      </div>
+      <div className="text-sm">Voice message</div>
     </div>
   );
 };

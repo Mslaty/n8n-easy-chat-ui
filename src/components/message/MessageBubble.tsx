@@ -68,8 +68,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     >
       <div 
         className={`rounded-lg px-4 py-3 max-w-[80%] break-words flex items-center relative ${
-          isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
-        }`}
+          isUser 
+            ? 'bg-chat-user-bubble text-white justify-center' 
+            : 'bg-chat-agent-bubble text-gray-200 justify-start'
+        } ${isOnlyVoiceMessage() ? 'py-1 px-2 max-w-[250px]' : ''}`}
       >
         {/* Only show copy button for agent messages when hovering and not for loading messages */}
         {!isUser && !isOnlyVoiceMessage() && !isLoadingDotsMessage() && showActions && (
