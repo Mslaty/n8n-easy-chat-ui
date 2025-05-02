@@ -171,7 +171,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
               {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
             </button>
             
-            <button type="submit" className="p-2 text-white bg-chat-accent hover:bg-chat-accent-hover rounded-full disabled:opacity-50" disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} aria-label="Send message">
+            <button type="submit" disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} aria-label="Send message" className="p-2 text-white hover:bg-chat-accent-hover rounded-full disabled:opacity-50 bg-transparent">
               <Send size={20} />
             </button>
           </div>
