@@ -13,6 +13,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster 
         position="bottom-right"
+        className="!right-4"
         toastOptions={{
           duration: 2000,
           className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0 max-w-sm w-auto",
