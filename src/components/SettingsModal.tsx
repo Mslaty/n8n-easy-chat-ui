@@ -110,22 +110,22 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               <Label className="text-gray-300">
                 Color Theme
               </Label>
-              <div className="grid grid-cols-4 gap-3 pt-1">
+              <div className="flex justify-around pt-2">
                 {colorOptions.map(option => (
                   <button
                     key={option.value}
                     type="button"
                     onClick={() => setColorTheme(option.value as 'purple' | 'blue' | 'green' | 'orange')}
-                    className={`relative h-10 rounded-md flex items-center justify-center ${
+                    className={`relative w-10 h-10 rounded-full flex items-center justify-center ${
                       colorTheme === option.value 
-                        ? 'ring-2 ring-white/20' 
-                        : 'ring-1 ring-white/5 hover:ring-white/10'
+                        ? 'ring-2 ring-white/40' 
+                        : 'ring-1 ring-white/10 hover:ring-white/30'
                     }`}
                     style={{ backgroundColor: option.color }}
                     aria-label={option.label}
                   >
                     {colorTheme === option.value && (
-                      <Check size={18} className="text-white" />
+                      <Check size={16} className="text-white" />
                     )}
                   </button>
                 ))}
@@ -198,7 +198,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               </Button>
               <Button
                 onClick={handleSave}
-                className="bg-chat-accent hover:bg-chat-accent-hover text-white"
+                className={`bg-chat-${colorTheme} hover:bg-chat-${colorTheme}-hover text-white`}
               >
                 Save
               </Button>

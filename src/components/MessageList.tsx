@@ -1,36 +1,38 @@
-import React, { useEffect, useRef } from 'react';
+
+import React from 'react';
 import { Message, Attachment } from '../types';
 import MessageBubble from './message/MessageBubble';
-import { ScrollArea } from './ui/scroll-area';
+
 interface MessageListProps {
   messages: Message[];
+  onDeleteMessage?: (id: string) => void;
   onCopyMessage: (content: string) => void;
   onDownloadAttachment: (attachment: Attachment) => void;
+  colorTheme?: 'purple' | 'blue' | 'green' | 'orange';
 }
-const MessageList: React.FC<MessageListProps> = ({
-  messages,
+
+const MessageList: React.FC<MessageListProps> = ({ 
+  messages, 
+  onDeleteMessage,
   onCopyMessage,
-  onDownloadAttachment
+  onDownloadAttachment,
+  colorTheme = 'purple'
 }) => {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: 'smooth'
-    });
-  };
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-  return <ScrollArea className="flex-1 relative">
-      <div className="px-[50px] py-4">
-        {messages.length === 0 ? <div className="flex items-center justify-center h-full text-gray-500 text-center">
-            <div>
-              <p className="mb-2">No messages yet</p>
-              <p className="text-sm">Save the n8n webhook link and type your first message</p>
-            </div>
-          </div> : messages.map(message => <MessageBubble key={message.id} message={message} onCopyMessage={onCopyMessage} onDownloadAttachment={onDownloadAttachment} />)}
-        <div ref={messagesEndRef} />
+  return (
+    <div className="flex-1 overflow-y-auto p-4">
+      <div className="max-w-3xl mx-auto">
+        {messages.map((message) => (
+          <MessageBubble 
+            key={message.id} 
+            message={message} 
+            onCopyMessage={onCopyMessage}
+            onDownloadAttachment={onDownloadAttachment}
+            colorTheme={colorTheme}
+          />
+        ))}
       </div>
-    </ScrollArea>;
+    </div>
+  );
 };
+
 export default MessageList;

@@ -1,43 +1,54 @@
 
 import React from 'react';
-import { Mic, Square } from 'lucide-react';
+import { Mic, StopCircle } from 'lucide-react';
 
 interface VoiceRecordButtonProps {
   isRecording: boolean;
-  onClick: () => void;
+  recordingSeconds: number;
+  onStartRecording: () => void;
+  onStopRecording: () => void;
   disabled: boolean;
-  recordingDuration: number;
+  colorTheme?: 'purple' | 'blue' | 'green' | 'orange';
 }
 
 const VoiceRecordButton: React.FC<VoiceRecordButtonProps> = ({
   isRecording,
-  onClick,
+  recordingSeconds,
+  onStartRecording,
+  onStopRecording,
   disabled,
-  recordingDuration
+  colorTheme = 'purple'
 }) => {
-  const formatRecordingTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return `${mins}:${secs}`;
   };
 
-  return (
-    <>
-      {isRecording && (
-        <div className="flex items-center mr-2 text-red-500">
-          <span className="text-sm animate-timer-pulse">{formatRecordingTime(recordingDuration)}</span>
-        </div>
-      )}
-      <button 
-        type="button" 
-        onClick={onClick} 
-        className={`p-2 rounded-full ${isRecording ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'} disabled:opacity-50`} 
-        disabled={disabled} 
-        aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+  if (isRecording) {
+    return (
+      <button
+        type="button"
+        onClick={onStopRecording}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/20 text-red-400 animate-timer-pulse"
+        aria-label="Stop recording"
       >
-        {isRecording ? <Square size={20} /> : <Mic size={20} />}
+        <StopCircle size={18} />
+        <span className="text-sm font-medium">{formatTime(recordingSeconds)}</span>
       </button>
-    </>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onStartRecording}
+      disabled={disabled}
+      className={`p-2 text-gray-400 hover:text-chat-${colorTheme} transition-colors disabled:opacity-50`}
+      aria-label="Record voice message"
+    >
+      <Mic size={20} />
+    </button>
   );
 };
 

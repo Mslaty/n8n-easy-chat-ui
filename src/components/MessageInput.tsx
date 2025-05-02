@@ -1,112 +1,130 @@
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Attachment } from '../types';
 import { useMessageInput } from '../hooks/useMessageInput';
+import SendButton from './input/SendButton';
 import AttachmentButton from './input/AttachmentButton';
 import VoiceRecordButton from './input/VoiceRecordButton';
-import SendButton from './input/SendButton';
 import AttachmentPreview from './input/AttachmentPreview';
 
 interface MessageInputProps {
-  onSendMessage: (message: string, attachments: Attachment[]) => void;
+  onSendMessage: (content: string, attachments: Attachment[]) => void;
+  onAddAttachment: (file: File) => Attachment;
   isConnected: boolean;
-  isLoading: boolean;
+  typingIndicator: boolean;
+  colorTheme?: 'purple' | 'blue' | 'green' | 'orange'; 
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
+  onAddAttachment,
   isConnected,
-  isLoading
+  typingIndicator,
+  colorTheme = 'purple'
 }) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const {
     message,
     setMessage,
     attachments,
-    isDragging,
+    setAttachments,
     isRecording,
-    recordingDuration,
-    fileInputRef,
-    textareaRef,
-    handleSubmit,
-    handleKeyDown,
+    setIsRecording,
+    recordingSeconds,
+    handleStartRecording,
+    handleStopRecording,
+    handleTextareaKeyDown,
+    handleRemoveAttachment,
     handleFileChange,
-    handleFileDrop,
-    removeAttachment,
-    handleDragOver,
-    handleDragLeave,
-    handleRecordToggle,
-    triggerFileInput,
-    shouldShowSendButton,
-    isConnected: connected,
-    isLoading: loading
-  } = useMessageInput(onSendMessage, isConnected, isLoading);
+    handleSendClick,
+    hasContent
+  } = useMessageInput(onSendMessage, onAddAttachment, textareaRef);
+  
+  // Automatically adjust textarea height as content changes
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '40px';
+      const scrollHeight = textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = `${Math.min(Math.max(40, scrollHeight), 120)}px`;
+    }
+  }, [message]);
+  
+  // Focus textarea on component mount
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
 
   return (
-    <div className="">
-      <AttachmentPreview 
-        attachments={attachments} 
-        onRemove={removeAttachment} 
-      />
+    <div className="border-t border-gray-800">
+      {attachments.length > 0 && (
+        <div className="px-4 pt-3 pb-1 gap-2 flex flex-wrap">
+          {attachments.map((attachment) => (
+            <AttachmentPreview
+              key={attachment.id}
+              attachment={attachment}
+              onRemove={() => handleRemoveAttachment(attachment.id)}
+            />
+          ))}
+        </div>
+      )}
       
       <form 
-        onSubmit={handleSubmit} 
-        className={`relative ${isDragging ? 'drag-over' : ''}`} 
-        onDragOver={handleDragOver} 
-        onDragLeave={handleDragLeave} 
-        onDrop={handleFileDrop}
+        className="flex items-end p-3 rounded-b-lg space-x-2 relative" 
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSendClick();
+        }}
       >
-        <div className="flex bg-chat-dark-secondary rounded-t-lg mx-[50px] px-[5px] my-0 py-[5px] border-t border-l border-r border-gray-700">
-          {/* Left side (attachment button) */}
-          <div className="flex pt-2 items-start">
-            <AttachmentButton 
-              onClick={triggerFileInput} 
-              disabled={!isConnected || isLoading} 
-            />
-          </div>
-          
-          {/* Center textarea */}
-          <div className="flex-1">
-            <textarea 
-              ref={textareaRef} 
-              value={message} 
-              onChange={e => setMessage(e.target.value)} 
-              onKeyDown={handleKeyDown} 
-              placeholder="Write your message..." 
-              className="w-full bg-transparent text-white placeholder-gray-500 p-3 outline-none resize-none max-h-32" 
-              rows={1} 
-              disabled={!isConnected || isLoading} 
-            />
-          </div>
-          
-          {/* Right side (recording and send buttons) */}
-          <div className="flex pt-2 items-start space-x-1">
-            <VoiceRecordButton 
-              isRecording={isRecording}
-              onClick={handleRecordToggle}
-              disabled={!isConnected || isLoading}
-              recordingDuration={recordingDuration}
-            />
-            
-            <SendButton 
-              disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading}
-              visible={shouldShowSendButton}
-            />
-          </div>
-        </div>
-        
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          onChange={handleFileChange} 
-          className="hidden" 
-          multiple 
+        {/* File Input (Hidden) */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          multiple
         />
         
-        {isDragging && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
-            <p className="text-white">Drop files here</p>
-          </div>
-        )}
+        {/* Attachment Button */}
+        <AttachmentButton 
+          onClick={() => fileInputRef.current?.click()}
+          disabled={!isConnected || isRecording}
+          colorTheme={colorTheme}
+        />
+
+        {/* Voice Recording Button */}
+        <VoiceRecordButton
+          isRecording={isRecording}
+          recordingSeconds={recordingSeconds}
+          onStartRecording={handleStartRecording}
+          onStopRecording={handleStopRecording}
+          disabled={!isConnected}
+          colorTheme={colorTheme}
+        />
+        
+        <div className="flex-1 relative">
+          <textarea
+            ref={textareaRef}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleTextareaKeyDown}
+            placeholder={isConnected ? "Type a message..." : "Connect to n8n webhook first..."}
+            className="w-full p-3 pr-10 resize-none rounded-lg bg-gray-900/40 border-gray-700 focus:border-gray-600 focus:ring-0 text-white placeholder-gray-500"
+            disabled={!isConnected || isRecording}
+            rows={1}
+          />
+        </div>
+        
+        {/* Send Button */}
+        <SendButton
+          onClick={handleSendClick}
+          disabled={!isConnected || (!hasContent && !attachments.length) || typingIndicator}
+          visible={!isRecording}
+          colorTheme={colorTheme}
+        />
       </form>
     </div>
   );

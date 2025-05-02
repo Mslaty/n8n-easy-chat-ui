@@ -1,10 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { Message, Attachment, ChatSettings } from '../types';
-import { generateId, saveMessages, getMessages } from '../utils';
-import { useChatWebhook } from '../hooks/useChatWebhook';
+import { Message, ChatSettings, Attachment } from '../types';
+import { useChatManagement } from '../hooks/useChatManagement';
 
 interface ChatContainerProps {
   settings: ChatSettings;
@@ -15,72 +14,72 @@ interface ChatContainerProps {
 
 const ChatContainer: React.FC<ChatContainerProps> = ({ 
   settings, 
-  isConnected, 
-  onCopyMessage, 
-  onDownloadAttachment 
+  isConnected,
+  onCopyMessage,
+  onDownloadAttachment
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const { isLoading, sendMessageToWebhook } = useChatWebhook(
-    settings.webhookUrl, 
-    settings.chatId,
-    settings.typingAnimation
-  );
+  const { 
+    messages,
+    isTyping,
+    handleSendMessage,
+    handleAddAttachment,
+    handleDeleteMessage
+  } = useChatManagement(settings);
   
-  // Load chat history from localStorage on mount
-  useEffect(() => {
-    // Load saved messages but make sure they don't have isTyping set
-    const savedMessages = getMessages(settings.chatId).map(msg => ({
-      ...msg,
-      isTyping: false // Ensure loaded messages don't have typing animation
-    }));
-    
-    if (savedMessages.length > 0) {
-      console.log('Loaded messages:', savedMessages); // Debug log
-      setMessages(savedMessages);
-    }
-  }, [settings.chatId]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
   
-  // Save messages to localStorage when they change
+  // Scroll to bottom when messages change
   useEffect(() => {
-    if (messages.length > 0) {
-      saveMessages(messages, settings.chatId)
-        .catch(error => console.error('Failed to save messages:', error));
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, settings.chatId]);
-
-  const handleSendMessage = async (messageText: string, attachments: Attachment[]) => {
-    // Create user message
-    const userMessage: Message = {
-      id: generateId(),
-      content: messageText.trim(),
-      sender: 'user',
-      timestamp: Date.now(),
-      attachments
-    };
+  }, [messages]);
+  
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+  
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
     
-    setMessages(prev => [...prev, userMessage]);
-    
-    // If we have a webhook URL, send the message
-    if (settings.webhookUrl) {
-      await sendMessageToWebhook(messageText, attachments, setMessages);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files);
+      files.forEach(file => {
+        handleAddAttachment(file);
+      });
     }
   };
   
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div 
+      className={`flex-1 flex flex-col overflow-hidden ${isDragging ? 'drag-over' : ''}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <MessageList 
-        messages={messages}
+        messages={messages} 
+        onDeleteMessage={handleDeleteMessage}
         onCopyMessage={onCopyMessage}
         onDownloadAttachment={onDownloadAttachment}
+        colorTheme={settings.colorTheme || 'purple'}
       />
-      
-      <div className="z-10">
-        <MessageInput 
-          onSendMessage={handleSendMessage}
-          isConnected={isConnected}
-          isLoading={isLoading}
-        />
-      </div>
+      <MessageInput 
+        onSendMessage={handleSendMessage} 
+        onAddAttachment={handleAddAttachment}
+        isConnected={isConnected}
+        typingIndicator={isTyping}
+        colorTheme={settings.colorTheme || 'purple'}
+      />
+      <div ref={messagesEndRef} />
     </div>
   );
 };
