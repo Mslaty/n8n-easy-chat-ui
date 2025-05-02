@@ -18,7 +18,6 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   attachment,
-  onDownloadAttachment,
   audioElements,
   playingAudio,
   setPlayingAudio,
@@ -28,8 +27,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   
   const toggleAudioPlayback = () => {
     // If no audio element exists for this attachment, create one
-    if (!audioElements[attachmentId] && attachment.data) {
-      const url = URL.createObjectURL(attachment.data);
+    if (!audioElements[attachmentId]) {
+      // Use the persisted URL if available, otherwise create a new object URL
+      const url = attachment.url || (attachment.data ? URL.createObjectURL(attachment.data) : '');
+      
+      if (!url) {
+        console.error('No audio URL available for playback');
+        return;
+      }
+      
       const audio = new Audio(url);
       audio.addEventListener('ended', () => {
         setPlayingAudio(null);

@@ -12,7 +12,7 @@ export interface Attachment {
   id: string;
   name: string;
   type: string;
-  url?: string;
+  url?: string;  // Added url property for persisted files
   data?: File;
   size?: number;
   previewUrl?: string;

@@ -1,4 +1,3 @@
-
 import { Message, Attachment, ChatSettings, ChatHistoryData } from '../types';
 
 // Generate a unique ID
@@ -8,16 +7,50 @@ export const generateId = (): string => {
 
 // Local storage functions
 export const saveMessages = (messages: Message[], chatId: string): void => {
+  // Need to process attachments before saving to localStorage
+  const processedMessages = messages.map(message => {
+    if (!message.attachments || message.attachments.length === 0) {
+      return message;
+    }
+
+    // Process each attachment
+    const processedAttachments = message.attachments.map(attachment => {
+      const processed = { ...attachment };
+      
+      // Store file data as URL string if available
+      if (attachment.data instanceof File) {
+        // For audio files, we need to create a persistent URL and store it
+        if (attachment.data.type.startsWith('audio/')) {
+          // Convert File to Base64 string for audio files only
+          // We don't need to do this for images since they already have previewUrl
+          if (!processed.url) {
+            processed.url = URL.createObjectURL(attachment.data);
+          }
+        }
+      }
+      
+      // Remove the File object as it can't be serialized
+      delete processed.data;
+      
+      return processed;
+    });
+
+    return {
+      ...message,
+      attachments: processedAttachments
+    };
+  });
+  
   const chatHistory = getChatHistory();
   const existingChatIndex = chatHistory.findIndex(chat => chat.id === chatId);
   
   if (existingChatIndex !== -1) {
-    chatHistory[existingChatIndex].messages = messages;
+    chatHistory[existingChatIndex].messages = processedMessages;
   } else if (chatId) {
     chatHistory.push({
       id: chatId,
       name: 'Chat ' + (chatHistory.length + 1),
-      messages,
+      messages: processedMessages,
       settings: getSettings()
     });
   }

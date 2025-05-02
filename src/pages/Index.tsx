@@ -135,6 +135,12 @@ const Index = () => {
       link.href = attachment.previewUrl;
       link.download = attachment.name;
       link.click();
+    } else if (attachment.url) {
+      // Use the URL that was stored in localStorage
+      const link = document.createElement('a');
+      link.href = attachment.url;
+      link.download = attachment.name;
+      link.click();
     } else if (attachment.data) {
       const url = URL.createObjectURL(attachment.data);
       const link = document.createElement('a');
