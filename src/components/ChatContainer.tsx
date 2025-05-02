@@ -35,6 +35,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     }));
     
     if (savedMessages.length > 0) {
+      console.log('Loaded messages:', savedMessages); // Debug log
       setMessages(savedMessages);
     }
   }, [settings.chatId]);

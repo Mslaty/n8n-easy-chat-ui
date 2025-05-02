@@ -24,7 +24,9 @@ const CopyButton: React.FC<CopyButtonProps> = ({ position, onClick }) => {
             lineHeight: 1,
             display: 'inline-flex',
             visibility: 'visible',
-            opacity: 1
+            opacity: 1,
+            position: 'relative',
+            zIndex: 50
           }}
         >
           <Copy size={14} />

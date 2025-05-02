@@ -20,7 +20,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onCopyMessage,
   onDownloadAttachment
 }) => {
-  const [showActions, setShowActions] = useState(true); // Always show actions by default
+  const [showActions, setShowActions] = useState(true); // Always show actions
   const isUser = message.sender === 'user';
   
   const { playingAudio, setPlayingAudio, audioElements, setAudioElements, resetAudioStates } = useAudioElements();
@@ -57,7 +57,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       className="flex mb-4 relative group"
       style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}
       onMouseEnter={() => setShowActions(true)} 
-      onMouseLeave={() => setShowActions(false)}
+      onMouseLeave={() => setShowActions(true)} // Always keep showActions true
       data-testid={`message-bubble-${message.id}`}
     >
       <div 
@@ -68,8 +68,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         {/* Only show copy button for agent messages */}
         {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
           <div 
-            className={`absolute top-1 right-1 opacity-100`}
-            style={{ display: 'block' }}
+            className="absolute top-1 right-1 opacity-100"
+            style={{ 
+              display: 'block',
+              visibility: 'visible',
+              opacity: 1 
+            }}
             data-testid="copy-button-agent"
           >
             <CopyButton 
