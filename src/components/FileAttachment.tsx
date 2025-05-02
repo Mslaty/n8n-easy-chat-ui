@@ -17,7 +17,7 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
   const isVoiceMessage = attachment.data && isAudioFile(attachment.data);
   
   return (
-    <div className="flex items-center px-3 py-2 bg-opacity-30 bg-transparent">
+    <div className="flex items-center px-3 py-3 bg-opacity-30 bg-transparent">
       <Music size={18} className="text-gray-400 mr-4 flex-shrink-0" />
       <div className="flex-1 min-w-0 flex items-center">
         <div>
