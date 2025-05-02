@@ -123,21 +123,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 Export Chat History
               </button>
               
-              <div className="w-full">
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportChat}
-                  className="block w-full text-sm text-gray-400
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-gray-700 file:text-white
-                    hover:file:bg-gray-600
-                    cursor-pointer"
-                />
-              </div>
-              
               <button
                 onClick={handleClearChat}
                 className="w-full text-white bg-red-700 hover:bg-red-600 py-2 px-4 rounded text-sm"
