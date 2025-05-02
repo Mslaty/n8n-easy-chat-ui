@@ -66,16 +66,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
   };
   
   return (
-    <div className="flex flex-col h-full relative">
-      <div className="flex-1 overflow-hidden">
-        <MessageList 
-          messages={messages}
-          onCopyMessage={onCopyMessage}
-          onDownloadAttachment={onDownloadAttachment}
-        />
-      </div>
+    <div className="flex flex-col h-full">
+      <MessageList 
+        messages={messages}
+        onCopyMessage={onCopyMessage}
+        onDownloadAttachment={onDownloadAttachment}
+      />
       
-      <div className="bg-chat-dark w-full z-10">
+      <div className="bg-chat-dark w-full">
         <MessageInput 
           onSendMessage={handleSendMessage}
           isConnected={isConnected}
