@@ -14,7 +14,7 @@ export const useCopyMessage = () => {
           // Use sonner toast for a more compact, semi-transparent dark notification
           sonnerToast("Copied to clipboard", {
             duration: 2000,
-            className: "bg-black/70 text-white text-xs py-1 px-2",
+            className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
             position: "bottom-right",
           });
         }).catch(err => {
@@ -28,7 +28,7 @@ export const useCopyMessage = () => {
       console.error('Failed to copy message:', err);
       sonnerToast.error("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1 px-2",
+        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     }
@@ -75,7 +75,7 @@ export const useCopyMessage = () => {
           // Use sonner toast for a more compact, semi-transparent dark notification
           sonnerToast("Copied to clipboard", {
             duration: 2000,
-            className: "bg-black/70 text-white text-xs py-1 px-2",
+            className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
             position: "bottom-right",
           });
           
@@ -94,7 +94,7 @@ export const useCopyMessage = () => {
       console.error('Failed to copy code:', err);
       sonnerToast.error("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1 px-2",
+        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     }
@@ -115,7 +115,7 @@ export const useCopyMessage = () => {
         // Use sonner toast for a more compact, semi-transparent dark notification
         sonnerToast("Copied to clipboard", {
           duration: 2000,
-          className: "bg-black/70 text-white text-xs py-1 px-2",
+          className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
           position: "bottom-right",
         });
         
@@ -130,7 +130,7 @@ export const useCopyMessage = () => {
       console.error('Fallback: Could not copy code: ', err);
       sonnerToast.error("Failed to copy", {
         duration: 2000,
-        className: "bg-black/70 text-white text-xs py-1 px-2",
+        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
         position: "bottom-right",
       });
     } finally {
