@@ -35,6 +35,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     handleDragOver,
     handleDragLeave,
     handleRecordToggle,
+    handleCancelRecording,
     triggerFileInput,
     shouldShowSendButton,
     isConnected: connected,
@@ -83,6 +84,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             <VoiceRecordButton 
               isRecording={isRecording}
               onClick={handleRecordToggle}
+              onCancel={handleCancelRecording}
               disabled={!isConnected || isLoading}
               recordingDuration={recordingDuration}
             />

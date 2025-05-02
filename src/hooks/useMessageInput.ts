@@ -145,6 +145,22 @@ export const useMessageInput = (
     }
   };
 
+  const handleCancelRecording = async () => {
+    try {
+      setIsRecording(false);
+      setRecordingDuration(0);
+      if (recordingTimerRef.current) {
+        window.clearInterval(recordingTimerRef.current);
+        recordingTimerRef.current = null;
+      }
+      // Stop recording but don't use the result
+      await stopRecording();
+      console.log('Recording canceled');
+    } catch (error) {
+      console.error('Error canceling recording:', error);
+    }
+  };
+
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
@@ -168,6 +184,7 @@ export const useMessageInput = (
     handleDragOver,
     handleDragLeave,
     handleRecordToggle,
+    handleCancelRecording,
     triggerFileInput,
     shouldShowSendButton,
     isConnected,

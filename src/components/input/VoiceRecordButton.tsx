@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { Mic, Square } from 'lucide-react';
+import { Mic, Square, X } from 'lucide-react';
 
 interface VoiceRecordButtonProps {
   isRecording: boolean;
   onClick: () => void;
+  onCancel?: () => void;
   disabled: boolean;
   recordingDuration: number;
 }
@@ -12,6 +13,7 @@ interface VoiceRecordButtonProps {
 const VoiceRecordButton: React.FC<VoiceRecordButtonProps> = ({
   isRecording,
   onClick,
+  onCancel,
   disabled,
   recordingDuration
 }) => {
@@ -37,6 +39,16 @@ const VoiceRecordButton: React.FC<VoiceRecordButtonProps> = ({
       >
         {isRecording ? <Square size={20} /> : <Mic size={20} />}
       </button>
+      {isRecording && onCancel && (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="ml-1 p-2 rounded-full text-gray-400 hover:text-white flex items-center justify-center"
+          aria-label="Cancel recording"
+        >
+          <X size={20} />
+        </button>
+      )}
     </div>
   );
 };
