@@ -1,11 +1,8 @@
-
 import { useState } from 'react';
-import { useToast } from "@/hooks/use-toast";
 import { toast as sonnerToast } from 'sonner';
 
 export const useCopyMessage = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  const { toast } = useToast();
   
   const handleCopy = (content: string) => {
     try {
