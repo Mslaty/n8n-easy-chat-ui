@@ -23,12 +23,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const [webhookUrl, setWebhookUrl] = useState(settings.webhookUrl);
   const [typingAnimation, setTypingAnimation] = useState(settings.typingAnimation);
-  const [chatName, setChatName] = useState(settings.chatName);
+  const [chatName, setChatName] = useState(settings.chatName || 'Chat');
   
   useEffect(() => {
     setWebhookUrl(settings.webhookUrl);
     setTypingAnimation(settings.typingAnimation);
-    setChatName(settings.chatName);
+    setChatName(settings.chatName || 'Chat');
   }, [settings, isOpen]);
   
   const handleSave = () => {
@@ -36,7 +36,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       ...settings,
       webhookUrl,
       typingAnimation,
-      chatName
+      chatName: chatName || 'Chat'
     });
     onClose();
   };
@@ -83,7 +83,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               value={chatName}
               onChange={(e) => setChatName(e.target.value)}
               className="w-full bg-gray-800 text-white p-2 rounded border border-gray-700 focus:border-chat-accent focus:ring-1 focus:ring-chat-accent outline-none"
-              placeholder="Enter chat name"
+              placeholder="Chat"
             />
           </div>
           

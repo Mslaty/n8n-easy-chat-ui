@@ -51,7 +51,7 @@ export const saveMessages = async (messages: Message[], chatId: string): Promise
   } else if (chatId) {
     chatHistory.push({
       id: chatId,
-      name: 'Chat ' + (chatHistory.length + 1),
+      name: 'Chat',
       messages: processedMessages,
       settings: getSettings()
     });
