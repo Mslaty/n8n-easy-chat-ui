@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
-import { Copy, CopyCheck } from 'lucide-react';
+import { Copy, CopyCheck, CircleEllipsis } from 'lucide-react';
 import { Message, Attachment } from '../types';
 import AttachmentsList from './AttachmentsList';
 import { isAudioFile } from '../utils';
 import ReactMarkdown from 'react-markdown';
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MessageBubbleProps {
   message: Message;
@@ -143,6 +145,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       );
     }
   };
+
+  // Loading animation for agent typing
+  const LoadingDots = () => {
+    return (
+      <div className="flex items-center space-x-2">
+        <CircleEllipsis size={20} className="text-chat-accent animate-pulse" />
+        <div className="flex space-x-1">
+          <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "0ms" }} />
+          <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "300ms" }} />
+          <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "600ms" }} />
+        </div>
+      </div>
+    );
+  };
   
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in group relative`}
@@ -167,7 +183,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           isUser ? 'bg-chat-user-bubble text-white' : 'bg-chat-agent-bubble text-gray-200'
         } ${isTyping ? 'animate-pulse' : ''}`}
       >
-        {message.content && (
+        {message.content && message.content === 'Agent is typing...' ? (
+          <LoadingDots />
+        ) : message.content && (
           <div className="mb-2">
             {isTyping ? (
               <div className="text-sm typing-animation">
