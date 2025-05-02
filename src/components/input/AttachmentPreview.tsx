@@ -15,7 +15,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachments, onRe
     <div className="flex flex-wrap gap-2 mb-3 mx-[50px]">
       {attachments.map(attachment => (
         <div key={attachment.id} className="relative group">
-          <div className="flex items-center bg-transparent rounded p-1.5 pr-8">
+          <div className="flex items-center bg-gray-800 rounded p-1.5 pr-8">
             {attachment.previewUrl || attachment.url ? (
               <img 
                 src={attachment.previewUrl || attachment.url} 
@@ -23,7 +23,7 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachments, onRe
                 className="w-8 h-8 object-cover rounded mr-2" 
               />
             ) : (
-              <div className="w-8 h-8 bg-gray-700/50 rounded flex items-center justify-center mr-2">
+              <div className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center mr-2">
                 <FileIcon size={16} className="text-gray-400" />
               </div>
             )}
