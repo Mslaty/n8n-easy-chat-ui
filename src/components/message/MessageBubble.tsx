@@ -20,7 +20,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onCopyMessage,
   onDownloadAttachment
 }) => {
-  const [showActions, setShowActions] = useState(true); // Always show actions
+  const [showActions, setShowActions] = useState(false); // Initially hide actions until hover
   const isUser = message.sender === 'user';
   
   const { playingAudio, setPlayingAudio, audioElements, setAudioElements, resetAudioStates } = useAudioElements();
@@ -45,6 +45,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     return hasOnlyAudioAttachments && (!message.content || message.content.trim() === '');
   };
 
+  // Check if this is a loading message with three dots
+  const isLoadingDotsMessage = () => {
+    return message.content === 'Agent is typing...';
+  };
+
   const handleCopyClick = () => {
     if (message.content) {
       handleCopy(message.content);
@@ -57,7 +62,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       className="flex mb-4 relative group"
       style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}
       onMouseEnter={() => setShowActions(true)} 
-      onMouseLeave={() => setShowActions(true)} // Always keep showActions true
+      onMouseLeave={() => setShowActions(false)} 
       data-testid={`message-bubble-${message.id}`}
     >
       <div 
@@ -65,8 +70,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         }`}
       >
-        {/* Only show copy button for agent messages - removed isTyping condition */}
-        {!isUser && !isOnlyVoiceMessage() && (
+        {/* Only show copy button for agent messages when hovering and not for loading messages */}
+        {!isUser && !isOnlyVoiceMessage() && !isLoadingDotsMessage() && showActions && (
           <div 
             className="absolute top-1 right-1"
             style={{ 
