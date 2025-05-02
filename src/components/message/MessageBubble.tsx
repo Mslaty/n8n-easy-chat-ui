@@ -53,6 +53,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const handleCopyClick = () => {
     if (message.content) {
       handleCopy(message.content);
+      // Just notify the parent component without showing another toast
       onCopyMessage(message.content);
     }
   };

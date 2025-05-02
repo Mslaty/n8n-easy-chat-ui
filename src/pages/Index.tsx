@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ChatHeader from '../components/ChatHeader';
 import ChatContainer from '../components/ChatContainer';
@@ -10,7 +9,7 @@ import {
   importChatHistory
 } from '../utils';
 import { downloadAttachment } from '../utils/attachmentHandlers';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 import { useCopyMessage } from '@/hooks/useCopyMessage';
 
 const Index = () => {
@@ -31,7 +30,9 @@ const Index = () => {
   };
   
   const handleCopyMessage = (content: string) => {
-    handleCopy(content); // Use the useCopyMessage hook for consistent behavior
+    // We don't need to call handleCopy here because it's already called in MessageBubble
+    // This prevents duplicate toasts
+    // Just keep this as a callback for parent component awareness
   };
   
   const handleDownloadAttachment = (attachment: Attachment) => {
