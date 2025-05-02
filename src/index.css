@@ -110,3 +110,19 @@
 .chat-gradient {
   background: linear-gradient(135deg, #8B5CF6 0%, #6E59A5 100%);
 }
+
+/* Add animations for file upload */
+@keyframes file-drop-highlight {
+  0%, 100% {
+    border-color: theme('colors.chat.accent');
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+  }
+  50% {
+    border-color: theme('colors.chat.accent');
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+  }
+}
+
+.file-drop-animation {
+  animation: file-drop-highlight 2s ease infinite;
+}
