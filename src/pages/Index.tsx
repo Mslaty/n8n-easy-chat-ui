@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ChatHeader from '../components/ChatHeader';
 import MessageList from '../components/MessageList';
@@ -64,13 +63,11 @@ const Index = () => {
         content: 'Agent is typing...',
         sender: 'agent',
         timestamp: Date.now(),
-        isTyping: true
+        isTyping: false // We don't use isTyping flag here as we always want to show the dots animation
       };
       
-      // Show typing indicator if animation is enabled
-      if (settings.typingAnimation) {
-        setMessages(prev => [...prev, typingMessage]);
-      }
+      // Always show typing indicator, either as dots animation or with typing effect based on settings
+      setMessages(prev => [...prev, typingMessage]);
       
       // Send message to webhook
       const files = attachments.map(a => a.data).filter(Boolean) as File[];
@@ -82,9 +79,7 @@ const Index = () => {
       );
       
       // Remove typing indicator
-      if (settings.typingAnimation) {
-        setMessages(prev => prev.filter(m => m.id !== typingId));
-      }
+      setMessages(prev => prev.filter(m => m.id !== typingId));
       
       // Add agent response
       const agentMessage: Message = {
@@ -101,9 +96,7 @@ const Index = () => {
       console.error('Error sending message:', error);
       
       // Remove typing indicator if it exists
-      if (settings.typingAnimation) {
-        setMessages(prev => prev.filter(m => m.isTyping));
-      }
+      setMessages(prev => prev.filter(m => m.isTyping));
       
       // Add error message
       const errorMessage: Message = {
