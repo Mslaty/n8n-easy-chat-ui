@@ -133,24 +133,25 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
         
-        <div className="flex flex-col p-4 border-t border-gray-800">
-          <div className="flex justify-end mb-3">
-            <button
-              onClick={onClose}
-              className="mr-2 text-white bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="text-white bg-chat-accent hover:bg-chat-accent-hover py-2 px-4 rounded"
-            >
-              Save
-            </button>
-          </div>
-          
-          <div className="text-center text-sm text-gray-400 mt-1">
-            Created by <a href="https://www.threads.com/@simplpear" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300 underline">Pear</a>
+        <div className="p-4 border-t border-gray-800">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-400">
+              Created by <a href="https://www.threads.com/@simplpear" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-300 underline">@simplpear</a>
+            </div>
+            <div className="flex">
+              <button
+                onClick={onClose}
+                className="mr-2 text-white bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="text-white bg-chat-accent hover:bg-chat-accent-hover py-2 px-4 rounded"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>
