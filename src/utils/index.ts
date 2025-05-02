@@ -98,7 +98,7 @@ export const getSettings = (): ChatSettings => {
     webhookUrl: '',
     typingAnimation: true,
     chatId: generateId(),
-    chatName: 'Chat with n8n'
+    chatName: 'Chat'
   };
   
   const savedSettings = localStorage.getItem('chatSettings');
