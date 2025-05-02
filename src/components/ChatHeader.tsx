@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Settings, ArrowLeft } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { ChatSettings } from '../types';
 
 interface ChatHeaderProps {
@@ -16,14 +16,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-      <div className="flex items-center gap-2">
-        <button className="text-gray-400 hover:text-white p-1 rounded-full">
-          <ArrowLeft size={20} />
-        </button>
-        <h2 className="text-white font-medium truncate">
-          {settings.chatName}
-        </h2>
-      </div>
+      <h2 className="text-white font-medium truncate">
+        {settings.chatName}
+      </h2>
       
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
