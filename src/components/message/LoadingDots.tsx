@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { CircleEllipsis } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 const LoadingDots: React.FC = () => {
   return (
     <div className="flex items-center justify-center space-x-2">
-      <CircleEllipsis size={20} className="text-chat-accent animate-pulse" />
+      <Bot size={20} className="text-chat-accent animate-pulse" />
       <div className="flex space-x-1">
         <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "0ms" }} />
         <div className="w-2 h-2 rounded-full bg-chat-accent animate-bounce" style={{ animationDelay: "300ms" }} />
