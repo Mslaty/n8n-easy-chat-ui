@@ -15,8 +15,8 @@ const App = () => (
         position="bottom-right"
         toastOptions={{
           duration: 2000,
-          className: "bg-transparent border-0 p-0 shadow-none",
-          unstyled: true,
+          className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+          unstyled: false,
         }}
       />
       <BrowserRouter>
