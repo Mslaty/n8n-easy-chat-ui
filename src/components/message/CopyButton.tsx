@@ -17,7 +17,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ position, onClick }) => {
           onClick={onClick} 
           variant="ghost" 
           size="icon"
-          className="bg-chat-dark-secondary/80 hover:bg-gray-700 text-gray-400 hover:text-white p-1 h-auto w-auto rounded-full z-30 inline-flex" 
+          className="bg-chat-dark-secondary/80 hover:bg-gray-700 text-gray-400 hover:text-white p-1 h-auto w-auto rounded-full z-50 inline-flex" 
           aria-label="Copy message"
           style={{ 
             minWidth: 'auto', 
@@ -26,7 +26,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ position, onClick }) => {
             visibility: 'visible',
             opacity: 1,
             position: 'relative',
-            zIndex: 50
+            zIndex: 100
           }}
         >
           <Copy size={14} />

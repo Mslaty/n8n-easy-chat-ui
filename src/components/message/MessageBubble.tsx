@@ -65,14 +65,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         }`}
       >
-        {/* Only show copy button for agent messages */}
-        {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
+        {/* Only show copy button for agent messages - removed isTyping condition */}
+        {!isUser && !isOnlyVoiceMessage() && (
           <div 
-            className="absolute top-1 right-1 opacity-100"
+            className="absolute top-1 right-1"
             style={{ 
               display: 'block',
               visibility: 'visible',
-              opacity: 1 
+              opacity: 1,
+              zIndex: 100 // Increased z-index for better visibility
             }}
             data-testid="copy-button-agent"
           >
