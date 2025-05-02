@@ -23,7 +23,6 @@ export interface ChatSettings {
   typingAnimation: boolean;
   chatId: string;
   chatName: string;
-  colorTheme?: 'purple' | 'blue' | 'green' | 'orange';
 }
 
 export interface ChatHistoryData {

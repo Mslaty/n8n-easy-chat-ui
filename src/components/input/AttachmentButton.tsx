@@ -1,27 +1,22 @@
 
 import React from 'react';
-import { PaperclipIcon } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
 
 interface AttachmentButtonProps {
   onClick: () => void;
   disabled: boolean;
-  colorTheme?: 'purple' | 'blue' | 'green' | 'orange';
 }
 
-const AttachmentButton: React.FC<AttachmentButtonProps> = ({ 
-  onClick, 
-  disabled,
-  colorTheme = 'purple'
-}) => {
+const AttachmentButton: React.FC<AttachmentButtonProps> = ({ onClick, disabled }) => {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className={`p-2 text-gray-400 hover:text-chat-${colorTheme} transition-colors disabled:opacity-50`}
-      aria-label="Add attachment"
+    <button 
+      type="button" 
+      onClick={onClick} 
+      className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50" 
+      disabled={disabled} 
+      aria-label="Attach file"
     >
-      <PaperclipIcon size={20} />
+      <Paperclip size={20} />
     </button>
   );
 };

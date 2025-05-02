@@ -32,7 +32,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
         
         <button 
           onClick={onOpenSettings}
-          className={`text-gray-400 hover:text-chat-${settings.colorTheme || 'purple'} p-1 rounded-full`}
+          className="text-gray-400 hover:text-white p-1 rounded-full"
           aria-label="Settings"
         >
           <Settings size={20} />

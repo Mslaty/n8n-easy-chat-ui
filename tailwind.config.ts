@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -73,12 +72,6 @@ export default {
 					'agent-bubble': '#1A1A1A',
 					'accent': '#8B5CF6',
 					'accent-hover': '#6E59A5',
-					'blue': '#3B82F6',
-					'blue-hover': '#2563EB',
-					'green': '#10B981',
-					'green-hover': '#059669',
-					'orange': '#F97316',
-					'orange-hover': '#EA580C',
 				},
 			},
 			borderRadius: {

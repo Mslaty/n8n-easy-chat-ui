@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ChatSettings } from '../types';
 import { exportChatHistory, clearChatHistory } from '../utils';
 import { Input } from './ui/input';
@@ -8,7 +8,6 @@ import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { Separator } from './ui/separator';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -30,13 +29,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const [webhookUrl, setWebhookUrl] = useState(settings.webhookUrl);
   const [typingAnimation, setTypingAnimation] = useState(settings.typingAnimation);
   const [chatName, setChatName] = useState(settings.chatName || 'Chat');
-  const [colorTheme, setColorTheme] = useState(settings.colorTheme || 'purple');
   
   useEffect(() => {
     setWebhookUrl(settings.webhookUrl);
     setTypingAnimation(settings.typingAnimation);
     setChatName(settings.chatName || 'Chat');
-    setColorTheme(settings.colorTheme || 'purple');
   }, [settings, isOpen]);
   
   const handleSave = () => {
@@ -44,8 +41,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       ...settings,
       webhookUrl,
       typingAnimation,
-      chatName: chatName || 'Chat',
-      colorTheme
+      chatName: chatName || 'Chat'
     });
     onClose();
   };
@@ -68,13 +64,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   };
   
   if (!isOpen) return null;
-
-  const colorOptions = [
-    { value: 'purple', label: 'Purple', color: '#8B5CF6' },
-    { value: 'blue', label: 'Blue', color: '#3B82F6' },
-    { value: 'green', label: 'Green', color: '#10B981' },
-    { value: 'orange', label: 'Orange', color: '#F97316' },
-  ];
   
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -104,32 +93,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 className="bg-gray-800/30 text-white border-0 focus-visible:ring-1 focus-visible:ring-chat-accent focus-visible:ring-offset-0 placeholder:text-gray-500"
                 placeholder="Chat"
               />
-            </div>
-            
-            <div className="space-y-2">
-              <Label className="text-gray-300">
-                Color Theme
-              </Label>
-              <div className="flex justify-around pt-2">
-                {colorOptions.map(option => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => setColorTheme(option.value as 'purple' | 'blue' | 'green' | 'orange')}
-                    className={`relative w-10 h-10 rounded-full flex items-center justify-center ${
-                      colorTheme === option.value 
-                        ? 'ring-2 ring-white/40' 
-                        : 'ring-1 ring-white/10 hover:ring-white/30'
-                    }`}
-                    style={{ backgroundColor: option.color }}
-                    aria-label={option.label}
-                  >
-                    {colorTheme === option.value && (
-                      <Check size={16} className="text-white" />
-                    )}
-                  </button>
-                ))}
-              </div>
             </div>
             
             <div className="space-y-2">
@@ -198,7 +161,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               </Button>
               <Button
                 onClick={handleSave}
-                className={`bg-chat-${colorTheme} hover:bg-chat-${colorTheme}-hover text-white`}
+                className="bg-chat-accent hover:bg-chat-accent-hover text-white"
               >
                 Save
               </Button>

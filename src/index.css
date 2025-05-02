@@ -107,18 +107,6 @@
   @apply animate-bounce-in;
 }
 
-.chat-gradient-purple {
+.chat-gradient {
   background: linear-gradient(135deg, #8B5CF6 0%, #6E59A5 100%);
-}
-
-.chat-gradient-blue {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-}
-
-.chat-gradient-green {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-}
-
-.chat-gradient-orange {
-  background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
 }

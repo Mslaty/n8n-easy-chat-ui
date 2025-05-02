@@ -13,14 +13,12 @@ interface MessageBubbleProps {
   message: Message;
   onCopyMessage: (content: string) => void;
   onDownloadAttachment: (attachment: Attachment) => void;
-  colorTheme?: 'purple' | 'blue' | 'green' | 'orange';
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
   onCopyMessage,
-  onDownloadAttachment,
-  colorTheme = 'purple'
+  onDownloadAttachment
 }) => {
   const [showActions, setShowActions] = useState(false); // Initially hide actions until hover
   const isUser = message.sender === 'user';
@@ -60,13 +58,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     }
   };
   
-  // Get the bubble color based on the theme
-  const getBubbleColor = () => {
-    if (!isUser) return "bg-chat-agent-bubble"; // Agent bubble is always the same
-    
-    return `bg-chat-${colorTheme}`; // User bubble changes with theme
-  };
-  
   return (
     <div 
       className="flex mb-4 relative group"
@@ -77,7 +68,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     >
       <div 
         className={`rounded-lg px-4 py-3 max-w-[80%] break-words flex items-center relative ${
-          isUser ? getBubbleColor() + ' text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
+          isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         }`}
       >
         {/* Only show copy button for agent messages when hovering and not for loading messages */}
