@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Copy } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface CopyButtonProps {
   position: 'left' | 'right';
@@ -9,13 +10,15 @@ interface CopyButtonProps {
 
 const CopyButton: React.FC<CopyButtonProps> = ({ position, onClick }) => {
   return (
-    <button 
+    <Button 
       onClick={onClick} 
-      className="text-xs text-gray-400 p-1 hover:text-white rounded bg-chat-dark-secondary z-20" 
+      variant="ghost" 
+      size="icon"
+      className="bg-chat-dark-secondary hover:bg-gray-700 text-gray-400 hover:text-white p-1 h-auto w-auto z-20" 
       aria-label="Copy message"
     >
       <Copy size={14} />
-    </button>
+    </Button>
   );
 };
 

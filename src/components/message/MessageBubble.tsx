@@ -23,15 +23,23 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const [showActions, setShowActions] = useState(false);
   const isUser = message.sender === 'user';
   
-  const { playingAudio, setPlayingAudio, audioElements, setAudioElements } = useAudioElements();
+  const { playingAudio, setPlayingAudio, audioElements, setAudioElements, resetAudioStates } = useAudioElements();
   const { displayedText, isTyping } = useTypingAnimation(message, isUser);
   const { copiedCode, handleCopy, handleCopyCode } = useCopyMessage();
 
   // Force update showActions state when message changes
+  // and reset audio states to ensure clean UI
   useEffect(() => {
-    // Reset the show actions state when new messages are added
     setShowActions(false);
-  }, [message.id]);
+    resetAudioStates();
+    
+    // Set initial visibility on mount to make buttons available without mouse hover
+    const timer = setTimeout(() => {
+      setShowActions(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [message.id, resetAudioStates]);
 
   // Check if the message only contains voice attachments and no text content
   const isOnlyVoiceMessage = () => {
@@ -55,14 +63,21 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   
   return (
     <div 
-      className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in group relative`}
+      className="flex mb-4 relative group animate-fade-in"
+      style={{ justifyContent: isUser ? 'flex-end' : 'flex-start' }}
       onMouseEnter={() => setShowActions(true)} 
       onMouseLeave={() => setShowActions(false)}
+      data-testid={`message-bubble-${message.id}`}
     >
       
       {/* Copy button for user messages (left side) */}
       {isUser && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div className={`absolute left-0 -translate-x-2 top-1/2 transform -translate-y-1/2 ${showActions ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 z-20`}>
+        <div 
+          className={`absolute left-0 -translate-x-2 top-1/2 transform -translate-y-1/2 transition-opacity duration-300 z-30 ${
+            showActions ? 'opacity-100' : 'opacity-0'
+          }`}
+          data-testid="copy-button-user"
+        >
           <CopyButton position="left" onClick={handleCopyClick} />
         </div>
       )}
@@ -99,7 +114,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       
       {/* Copy button for agent messages (right side) */}
       {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
-        <div className={`absolute right-0 translate-x-2 top-1/2 transform -translate-y-1/2 ${showActions ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 z-20`}>
+        <div 
+          className={`absolute right-0 translate-x-2 top-1/2 transform -translate-y-1/2 transition-opacity duration-300 z-30 ${
+            showActions ? 'opacity-100' : 'opacity-0'
+          }`}
+          data-testid="copy-button-agent"
+        >
           <CopyButton position="right" onClick={handleCopyClick} />
         </div>
       )}
