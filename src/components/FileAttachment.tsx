@@ -2,7 +2,7 @@
 import React from 'react';
 import { Music, Download } from 'lucide-react';
 import { Attachment } from '../types';
-import { formatFileSize } from '../utils';
+import { formatFileSize, isAudioFile } from '../utils';
 
 interface FileAttachmentProps {
   attachment: Attachment;
@@ -13,12 +13,17 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
   attachment,
   onDownloadAttachment
 }) => {
+  // Check if it's an audio file to display "Voice message" instead of filename
+  const isVoiceMessage = attachment.data && isAudioFile(attachment.data);
+  
   return (
     <div className="flex items-center p-0 bg-opacity-30 bg-transparent">
       <Music size={18} className="text-gray-400 mr-2" />
       <div className="flex-1 min-w-0">
-        <div className="text-sm truncate">{attachment.name}</div>
-        {attachment.size && (
+        <div className="text-sm truncate">
+          {isVoiceMessage ? "Voice message" : attachment.name}
+        </div>
+        {attachment.size && !isVoiceMessage && (
           <div className="text-xs text-gray-400">
             {formatFileSize(attachment.size)}
           </div>
