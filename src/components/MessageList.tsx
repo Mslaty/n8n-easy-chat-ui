@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Message, Attachment } from '../types';
-import MessageBubble from './MessageBubble';
+import MessageBubble from './message/MessageBubble';
 
 interface MessageListProps {
   messages: Message[];
