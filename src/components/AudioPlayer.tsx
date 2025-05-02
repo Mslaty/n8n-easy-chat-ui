@@ -25,6 +25,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   setAudioElements
 }) => {
   const attachmentId = attachment.id || '';
+  const isPlaying = playingAudio === attachmentId;
   
   const toggleAudioPlayback = () => {
     // If no audio element exists for this attachment, create one
@@ -79,12 +80,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     <div className="flex items-center justify-center bg-opacity-30 bg-transparent py-2 px-2 max-w-xs">
       <button 
         onClick={toggleAudioPlayback} 
-        className="p-2 rounded-full mr-3 text-white bg-white/[0.17] flex-shrink-0"
+        className={`p-2 rounded-full mr-3 ${
+          isPlaying 
+            ? 'text-white bg-chat-accent animate-pulse' 
+            : 'text-white bg-white/[0.17]'
+        } flex-shrink-0`}
+        aria-label={isPlaying ? 'Pause voice message' : 'Play voice message'}
       >
-        {playingAudio === attachmentId ? <Pause size={14} /> : <Play size={14} />}
+        {isPlaying ? <Pause size={14} /> : <Play size={14} />}
       </button>
       
-      <div className="text-sm">Voice message</div>
+      <div className={`text-sm ${isPlaying ? 'text-chat-accent' : ''}`}>Voice message</div>
     </div>
   );
 };

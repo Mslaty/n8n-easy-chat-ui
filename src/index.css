@@ -123,3 +123,20 @@
 .animate-timer-pulse {
   animation: timer-pulse 1.5s ease-in-out infinite;
 }
+
+@keyframes audio-play-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.audio-playing {
+  animation: audio-play-pulse 2s infinite ease-in-out;
+}
+
