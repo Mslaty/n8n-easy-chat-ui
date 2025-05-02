@@ -1,15 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, Square, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
 import { generateId, createObjectURL, startRecording, stopRecording, isImageFile } from '../utils';
-
 interface MessageInputProps {
   onSendMessage: (message: string, attachments: Attachment[]) => void;
   isConnected: boolean;
   isLoading: boolean;
 }
-
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
   isConnected,
@@ -23,7 +20,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const recordingTimerRef = useRef<number | null>(null);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() && attachments.length === 0) return;
@@ -31,7 +27,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     setMessage('');
     setAttachments([]);
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -40,7 +35,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       }
     }
   };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newAttachments: Attachment[] = [];
@@ -68,7 +62,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       fileInputRef.current.value = '';
     }
   };
-
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -95,26 +88,21 @@ const MessageInput: React.FC<MessageInputProps> = ({
       setAttachments(prev => [...prev, ...newAttachments]);
     }
   };
-
   const removeAttachment = (id: string) => {
     setAttachments(prev => prev.filter(a => a.id !== id));
   };
-
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
-
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-
   const formatRecordingTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
-
   const handleRecordToggle = async () => {
     try {
       if (isRecording) {
@@ -154,7 +142,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
       }
     }
   };
-
   useEffect(() => {
     return () => {
       if (recordingTimerRef.current) {
@@ -162,18 +149,15 @@ const MessageInput: React.FC<MessageInputProps> = ({
       }
     };
   }, []);
-
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [message]);
-
   const shouldShowSendButton = message.trim().length > 0 || attachments.length > 0;
-
   return <div className="">
-      {attachments.length > 0 && <div className="flex flex-wrap gap-2 mb-3">
+      {attachments.length > 0 && <div className="flex flex-wrap gap-2 mb-3 mx-[50px]">
           {attachments.map(attachment => <div key={attachment.id} className="relative group">
               <div className="flex items-center bg-gray-800 rounded p-1.5 pr-8">
                 {attachment.previewUrl ? <img src={attachment.previewUrl} alt={attachment.name} className="w-8 h-8 object-cover rounded mr-2" /> : <div className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center mr-2">
@@ -209,16 +193,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
               {isRecording ? <Square size={20} /> : <Mic size={20} />}
             </button>
             
-            {shouldShowSendButton && (
-              <button 
-                type="submit" 
-                disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} 
-                aria-label="Send message" 
-                className="text-gray-400 hover:text-white p-2 rounded-full transition-opacity duration-300 animate-fade-in"
-              >
+            {shouldShowSendButton && <button type="submit" disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} aria-label="Send message" className="text-gray-400 hover:text-white p-2 rounded-full transition-opacity duration-300 animate-fade-in">
                 <Send size={20} />
-              </button>
-            )}
+              </button>}
           </div>
         </div>
         
@@ -230,5 +207,4 @@ const MessageInput: React.FC<MessageInputProps> = ({
       </form>
     </div>;
 };
-
 export default MessageInput;
