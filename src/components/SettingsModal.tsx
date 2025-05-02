@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { ChatSettings } from '../types';
 import { exportChatHistory, clearChatHistory } from '../utils';
+import { Input } from './ui/input';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -78,11 +79,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             <label className="block text-sm font-medium text-gray-300 mb-1">
               Chat Name
             </label>
-            <input
+            <Input
               type="text"
               value={chatName}
               onChange={(e) => setChatName(e.target.value)}
-              className="w-full bg-gray-800 text-white p-2 rounded border border-gray-700 focus:border-chat-accent focus:ring-1 focus:ring-chat-accent outline-none"
+              className="bg-gray-800/50 text-white border-0 focus-visible:ring-1 focus-visible:ring-chat-accent focus-visible:ring-offset-0 placeholder:text-gray-500"
               placeholder="Chat"
             />
           </div>
@@ -91,11 +92,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             <label className="block text-sm font-medium text-gray-300 mb-1">
               n8n Webhook URL
             </label>
-            <input
+            <Input
               type="text"
               value={webhookUrl}
               onChange={(e) => setWebhookUrl(e.target.value)}
-              className="w-full bg-gray-800 text-white p-2 rounded border border-gray-700 focus:border-chat-accent focus:ring-1 focus:ring-chat-accent outline-none"
+              className="bg-gray-800/50 text-white border-0 focus-visible:ring-1 focus-visible:ring-chat-accent focus-visible:ring-offset-0 placeholder:text-gray-500"
               placeholder="Enter production webhook link"
             />
           </div>
