@@ -123,8 +123,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 Export Chat History
               </button>
               
-              <label className="block">
-                <span className="sr-only">Import Chat</span>
+              <div className="w-full">
                 <input
                   type="file"
                   accept=".json"
@@ -137,7 +136,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     hover:file:bg-gray-600
                     cursor-pointer"
                 />
-              </label>
+              </div>
               
               <button
                 onClick={handleClearChat}
