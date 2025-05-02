@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Play, Pause } from 'lucide-react';
 import { Attachment } from '../types';
@@ -32,6 +33,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       const audio = new Audio(url);
       audio.addEventListener('ended', () => {
         setPlayingAudio(null);
+        // Reset audio position to beginning when it ends
+        audio.currentTime = 0;
       });
       setAudioElements(prev => ({
         ...prev,
@@ -53,6 +56,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         if (playingAudio && audioElements[playingAudio]) {
           audioElements[playingAudio].pause();
         }
+        
+        // Reset audio to beginning if it has ended
+        if (audio.ended || audio.currentTime === audio.duration) {
+          audio.currentTime = 0;
+        }
+        
         audio.play();
         setPlayingAudio(attachmentId);
       }
