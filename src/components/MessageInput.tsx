@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, Square, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
@@ -202,7 +203,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           
           <div className="flex items-center p-2 space-x-1">
             {isRecording && <div className="flex items-center mr-2 text-red-500">
-                <span className="text-sm">{formatRecordingTime(recordingDuration)}</span>
+                <span className="text-sm animate-timer-pulse">{formatRecordingTime(recordingDuration)}</span>
               </div>}
             <button type="button" onClick={handleRecordToggle} className={`p-2 rounded-full ${isRecording ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'} disabled:opacity-50`} disabled={!isConnected || isLoading} aria-label={isRecording ? 'Stop recording' : 'Start recording'}>
               {isRecording ? <Square size={20} /> : <Mic size={20} />}

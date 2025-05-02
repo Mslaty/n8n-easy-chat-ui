@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -111,6 +112,10 @@ export default {
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(10px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'timer-blink': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
 				}
 			},
 			animation: {
@@ -119,7 +124,8 @@ export default {
 				'typing': 'typing 1.5s steps(30, end)',
 				'blink': 'blink 0.7s infinite',
 				'bounce-in': 'bounce-in 0.3s ease-out',
-				'fade-in': 'fade-in 0.5s ease-out'
+				'fade-in': 'fade-in 0.5s ease-out',
+				'timer-pulse': 'timer-blink 1.5s ease-in-out infinite'
 			}
 		}
 	},
