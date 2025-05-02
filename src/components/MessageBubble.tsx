@@ -75,7 +75,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           </div>}
         
         {!message.isTyping && message.attachments && message.attachments.length > 0 && <div className="space-y-2 mt-2">
-            {message.attachments.map(attachment => <div key={attachment.id || attachment.name} className="rounded border border-gray-700">
+            {message.attachments.map(attachment => <div key={attachment.id || attachment.name} className="">
                 {attachment.previewUrl && isImageFile(attachment.data) ? <div className="relative group">
                     <img src={attachment.previewUrl} alt={attachment.name || 'Image attachment'} className="rounded max-h-60 w-auto object-contain" />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
