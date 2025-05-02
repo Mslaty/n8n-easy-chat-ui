@@ -33,12 +33,12 @@ const AttachmentsList: React.FC<AttachmentsListProps> = ({
     <div className="space-y-2 mt-2">
       {attachments.map(attachment => (
         <div key={attachment.id || attachment.name} className="rounded-md overflow-hidden">
-          {attachment.previewUrl && isImageFile(attachment.data) ? (
+          {(attachment.previewUrl || (attachment.type?.startsWith('image/'))) ? (
             <ImageAttachment 
               attachment={attachment} 
               onDownloadAttachment={onDownloadAttachment} 
             />
-          ) : attachment.data && isAudioFile(attachment.data) ? (
+          ) : isAudioFile(attachment) ? (
             <AudioPlayer 
               attachment={attachment} 
               onDownloadAttachment={onDownloadAttachment}

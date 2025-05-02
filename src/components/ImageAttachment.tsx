@@ -12,10 +12,13 @@ const ImageAttachment: React.FC<ImageAttachmentProps> = ({
   attachment,
   onDownloadAttachment
 }) => {
+  // Use either the previewUrl or the url property
+  const imageUrl = attachment.previewUrl || attachment.url;
+  
   return (
     <div className="relative group">
       <img 
-        src={attachment.previewUrl} 
+        src={imageUrl} 
         alt={attachment.name || 'Image attachment'} 
         className="rounded max-h-60 w-auto object-contain" 
       />

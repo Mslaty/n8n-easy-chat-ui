@@ -35,7 +35,8 @@ const Index = () => {
   // Save messages to localStorage when they change
   useEffect(() => {
     if (messages.length > 0) {
-      saveMessages(messages, settings.chatId);
+      saveMessages(messages, settings.chatId)
+        .catch(error => console.error('Failed to save messages:', error));
     }
   }, [messages, settings.chatId]);
   
@@ -130,15 +131,26 @@ const Index = () => {
   };
   
   const handleDownloadAttachment = (attachment: Attachment) => {
-    if (attachment.previewUrl) {
+    if (attachment.url) {
+      // For base64 data URLs
+      if (attachment.url.startsWith('data:')) {
+        const link = document.createElement('a');
+        link.href = attachment.url;
+        link.download = attachment.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } 
+      // For blob URLs
+      else {
+        const link = document.createElement('a');
+        link.href = attachment.url;
+        link.download = attachment.name;
+        link.click();
+      }
+    } else if (attachment.previewUrl) {
       const link = document.createElement('a');
       link.href = attachment.previewUrl;
-      link.download = attachment.name;
-      link.click();
-    } else if (attachment.url) {
-      // Use the URL that was stored in localStorage
-      const link = document.createElement('a');
-      link.href = attachment.url;
       link.download = attachment.name;
       link.click();
     } else if (attachment.data) {

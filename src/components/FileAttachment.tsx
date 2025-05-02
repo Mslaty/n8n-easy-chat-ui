@@ -1,6 +1,15 @@
 
 import React from 'react';
-import { Music, Download } from 'lucide-react';
+import { 
+  FileAudio, 
+  FileImage, 
+  FileVideo, 
+  FileText, 
+  FileArchive, 
+  FileCode,
+  FilePdf,
+  Download
+} from 'lucide-react';
 import { Attachment } from '../types';
 import { formatFileSize, isAudioFile } from '../utils';
 
@@ -14,11 +23,32 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
   onDownloadAttachment
 }) => {
   // Check if it's an audio file to display "Voice message" instead of filename
-  const isVoiceMessage = attachment.data && isAudioFile(attachment.data);
+  const isVoiceMessage = isAudioFile(attachment);
+  
+  // Select the appropriate icon based on file type
+  const getFileIcon = () => {
+    const type = attachment.type.toLowerCase();
+    
+    if (type.includes('audio')) {
+      return <FileAudio size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else if (type.includes('image')) {
+      return <FileImage size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else if (type.includes('video')) {
+      return <FileVideo size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else if (type.includes('pdf')) {
+      return <FilePdf size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else if (type.includes('zip') || type.includes('rar') || type.includes('tar') || type.includes('7z')) {
+      return <FileArchive size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else if (type.includes('html') || type.includes('css') || type.includes('javascript') || type.includes('json') || type.includes('xml')) {
+      return <FileCode size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    } else {
+      return <FileText size={18} className="text-gray-400 mr-4 flex-shrink-0" />;
+    }
+  };
   
   return (
     <div className="flex items-center px-3 py-3 bg-opacity-30 bg-transparent">
-      <Music size={18} className="text-gray-400 mr-4 flex-shrink-0" />
+      {getFileIcon()}
       <div className="flex-1 min-w-0 flex items-center">
         <div>
           <div className="text-sm truncate">

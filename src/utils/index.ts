@@ -5,27 +5,41 @@ export const generateId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
+// Convert file to base64 string for storage
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
 // Local storage functions
-export const saveMessages = (messages: Message[], chatId: string): void => {
+export const saveMessages = async (messages: Message[], chatId: string): Promise<void> => {
   // Need to process attachments before saving to localStorage
-  const processedMessages = messages.map(message => {
+  const processedMessages = await Promise.all(messages.map(async message => {
     if (!message.attachments || message.attachments.length === 0) {
       return message;
     }
 
     // Process each attachment
-    const processedAttachments = message.attachments.map(attachment => {
+    const processedAttachments = await Promise.all(message.attachments.map(async attachment => {
       const processed = { ...attachment };
       
       // Store file data as URL string if available
       if (attachment.data instanceof File) {
-        // For audio files, we need to create a persistent URL and store it
-        if (attachment.data.type.startsWith('audio/')) {
-          // Convert File to Base64 string for audio files only
-          // We don't need to do this for images since they already have previewUrl
-          if (!processed.url) {
-            processed.url = URL.createObjectURL(attachment.data);
+        try {
+          // If it's an image that already has a previewUrl, use that
+          if (attachment.previewUrl && attachment.data.type.startsWith('image/')) {
+            processed.url = attachment.previewUrl;
+          } 
+          // For other files, convert to base64
+          else {
+            processed.url = await fileToBase64(attachment.data);
           }
+        } catch (err) {
+          console.error('Failed to convert file to base64:', err);
         }
       }
       
@@ -33,13 +47,13 @@ export const saveMessages = (messages: Message[], chatId: string): void => {
       delete processed.data;
       
       return processed;
-    });
+    }));
 
     return {
       ...message,
       attachments: processedAttachments
     };
-  });
+  }));
   
   const chatHistory = getChatHistory();
   const existingChatIndex = chatHistory.findIndex(chat => chat.id === chatId);
@@ -55,7 +69,17 @@ export const saveMessages = (messages: Message[], chatId: string): void => {
     });
   }
   
-  localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+  try {
+    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+    // Handle localStorage quota exceeded
+    if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+      // Remove oldest chat histories to free up space
+      const reducedHistory = chatHistory.slice(-3); // Keep only the 3 most recent chats
+      localStorage.setItem('chatHistory', JSON.stringify(reducedHistory));
+    }
+  }
 };
 
 export const getMessages = (chatId: string): Message[] => {
@@ -159,10 +183,13 @@ export const isImageFile = (file: File | null | undefined): boolean => {
   return file.type.startsWith('image/');
 };
 
-// Check if the file is an audio
-export const isAudioFile = (file: File | null | undefined): boolean => {
-  if (!file || !file.type) return false;
-  return file.type.startsWith('audio/');
+// Check if an attachment is an audio file
+export const isAudioFile = (attachment: Attachment): boolean => {
+  // Check both the data property and the type string
+  if (attachment.data) {
+    return attachment.data.type.startsWith('audio/');
+  }
+  return attachment.type && attachment.type.toLowerCase().startsWith('audio/');
 };
 
 // Send message to webhook

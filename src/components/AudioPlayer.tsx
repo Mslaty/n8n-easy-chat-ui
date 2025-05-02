@@ -18,6 +18,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   attachment,
+  onDownloadAttachment,
   audioElements,
   playingAudio,
   setPlayingAudio,
