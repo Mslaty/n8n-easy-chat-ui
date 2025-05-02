@@ -167,6 +167,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [message]);
+  
+  // Determine if send button should be visible
+  const shouldShowSendButton = message.trim().length > 0 || attachments.length > 0;
+
   return <div className="">
       {attachments.length > 0 && <div className="flex flex-wrap gap-2 mb-3">
           {attachments.map(attachment => <div key={attachment.id} className="relative group">
@@ -204,9 +208,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
               {isRecording ? <Square size={20} /> : <Mic size={20} />}
             </button>
             
-            <button type="submit" disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} aria-label="Send message" className="">
-              <Send size={20} />
-            </button>
+            {shouldShowSendButton && (
+              <button 
+                type="submit" 
+                disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} 
+                aria-label="Send message" 
+                className="text-gray-400 hover:text-white p-2 rounded-full"
+              >
+                <Send size={20} />
+              </button>
+            )}
           </div>
         </div>
         
