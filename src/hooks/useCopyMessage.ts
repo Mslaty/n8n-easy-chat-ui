@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { toast as sonnerToast } from 'sonner';
@@ -46,19 +47,21 @@ export const useCopyMessage = () => {
     try {
       const successful = document.execCommand('copy');
       if (successful) {
-        toast({
-          title: "Copied!",
-          description: "Message copied to clipboard"
+        // Use sonner toast instead of shadcn toast for consistency
+        sonnerToast("Copied to clipboard", {
+          duration: 2000,
+          className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+          position: "bottom-right",
         });
       } else {
         throw new Error('Copy command was unsuccessful');
       }
     } catch (err) {
       console.error('Fallback: Could not copy text: ', err);
-      toast({
-        title: "Error",
-        description: "Failed to copy to clipboard",
-        variant: "destructive"
+      sonnerToast.error("Failed to copy", {
+        duration: 2000,
+        className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
+        position: "bottom-right",
       });
     } finally {
       document.body.removeChild(textarea);
