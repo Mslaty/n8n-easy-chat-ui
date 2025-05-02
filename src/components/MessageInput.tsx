@@ -79,7 +79,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </div>
           
           {/* Right side (recording and send buttons) */}
-          <div className="flex pt-2 items-start space-x-1">
+          <div className="flex pt-2 items-center space-x-1">
             <VoiceRecordButton 
               isRecording={isRecording}
               onClick={handleRecordToggle}

@@ -22,7 +22,7 @@ const VoiceRecordButton: React.FC<VoiceRecordButtonProps> = ({
   };
 
   return (
-    <>
+    <div className="flex items-center">
       {isRecording && (
         <div className="flex items-center mr-2 text-red-500">
           <span className="text-sm animate-timer-pulse">{formatRecordingTime(recordingDuration)}</span>
@@ -31,13 +31,13 @@ const VoiceRecordButton: React.FC<VoiceRecordButtonProps> = ({
       <button 
         type="button" 
         onClick={onClick} 
-        className={`p-2 rounded-full ${isRecording ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'} disabled:opacity-50`} 
+        className={`p-2 rounded-full ${isRecording ? 'text-red-500 hover:text-red-400' : 'text-gray-400 hover:text-white'} disabled:opacity-50 flex items-center justify-center`} 
         disabled={disabled} 
         aria-label={isRecording ? 'Stop recording' : 'Start recording'}
       >
         {isRecording ? <Square size={20} /> : <Mic size={20} />}
       </button>
-    </>
+    </div>
   );
 };
 
