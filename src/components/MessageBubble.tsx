@@ -65,9 +65,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         {message.content && (
           <div className="mb-2">
             {message.isTyping ? (
-              <span className="typing-indicator">{message.content}</span>
+              <span className="typing-indicator text-sm">{message.content}</span>
             ) : (
-              <div className="whitespace-pre-wrap">{message.content}</div>
+              <div className="whitespace-pre-wrap text-sm">{message.content}</div>
             )}
           </div>
         )}
