@@ -92,11 +92,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         
         return (
           <div className="relative group/code">
-            <pre className={className} {...props}>
-              <code className={className} {...props}>
-                {children}
-              </code>
-            </pre>
+            <code className={className} {...props}>
+              {children}
+            </code>
             <button
               onClick={() => handleCopyCode(code)}
               className="absolute right-2 top-2 p-1 rounded bg-gray-800/50 text-gray-400 opacity-0 group-hover/code:opacity-100 hover:bg-gray-700/50 hover:text-white transition-opacity"
