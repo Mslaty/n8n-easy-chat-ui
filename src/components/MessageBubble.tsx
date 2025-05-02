@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Message, Attachment } from '../types';
 import { formatFileSize, isImageFile } from '../utils';
-import { File, Copy, Download } from 'lucide-react';
+import { File, Copy, Download, Play, Pause, Volume2 } from 'lucide-react';
 
 interface MessageBubbleProps {
   message: Message;
@@ -16,11 +16,69 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onDownloadAttachment
 }) => {
   const [showActions, setShowActions] = useState(false);
+  const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+  const [audioElements, setAudioElements] = useState<{[key: string]: HTMLAudioElement}>({});
   const isUser = message.sender === 'user';
   
   const handleCopy = () => {
     onCopyMessage(message.content);
   };
+  
+  const isAudioFile = (file: File): boolean => {
+    return file.type.startsWith('audio/');
+  };
+  
+  const toggleAudioPlayback = (attachment: Attachment) => {
+    const attachmentId = attachment.id;
+    
+    // If no audio element exists for this attachment, create one
+    if (!audioElements[attachmentId] && attachment.data) {
+      const url = URL.createObjectURL(attachment.data);
+      const audio = new Audio(url);
+      
+      audio.addEventListener('ended', () => {
+        setPlayingAudio(null);
+      });
+      
+      setAudioElements(prev => ({
+        ...prev,
+        [attachmentId]: audio
+      }));
+      
+      audio.play();
+      setPlayingAudio(attachmentId);
+      return;
+    }
+    
+    // If an audio element exists, toggle play/pause
+    const audio = audioElements[attachmentId];
+    if (audio) {
+      if (playingAudio === attachmentId) {
+        audio.pause();
+        setPlayingAudio(null);
+      } else {
+        // Pause any currently playing audio
+        if (playingAudio && audioElements[playingAudio]) {
+          audioElements[playingAudio].pause();
+        }
+        
+        audio.play();
+        setPlayingAudio(attachmentId);
+      }
+    }
+  };
+  
+  // Cleanup audio elements on component unmount
+  React.useEffect(() => {
+    return () => {
+      Object.values(audioElements).forEach(audio => {
+        audio.pause();
+        if (audio.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audio.src);
+        }
+      });
+    };
+  }, [audioElements]);
   
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} message-appear`}>
@@ -69,6 +127,35 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                           <button 
                             onClick={() => onDownloadAttachment(attachment)}
                             className="p-1 bg-black bg-opacity-50 rounded-full text-white"
+                          >
+                            <Download size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : isAudioFile(attachment.data as File) ? (
+                      <div className="flex items-center p-2 bg-gray-800 bg-opacity-30">
+                        <button
+                          onClick={() => toggleAudioPlayback(attachment)}
+                          className="p-2 rounded-full bg-gray-700 mr-3 text-white hover:bg-gray-600"
+                        >
+                          {playingAudio === attachment.id ? 
+                            <Pause size={16} /> : 
+                            <Play size={16} />
+                          }
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm truncate">{attachment.name}</div>
+                          {attachment.size && (
+                            <div className="text-xs text-gray-400">
+                              {formatFileSize(attachment.size)}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center">
+                          <Volume2 size={14} className="text-gray-400 mr-1" />
+                          <button 
+                            onClick={() => onDownloadAttachment(attachment)}
+                            className="p-1 text-gray-400 hover:text-white"
                           >
                             <Download size={16} />
                           </button>

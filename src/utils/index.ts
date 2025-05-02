@@ -125,6 +125,11 @@ export const isImageFile = (file: File): boolean => {
   return file.type.startsWith('image/');
 };
 
+// Check if the file is an audio
+export const isAudioFile = (file: File): boolean => {
+  return file.type.startsWith('audio/');
+};
+
 // Send message to webhook
 export const sendToWebhook = async (
   webhookUrl: string,
