@@ -121,12 +121,14 @@ export const revokeObjectURL = (url: string): void => {
 };
 
 // Check if the file is an image
-export const isImageFile = (file: File): boolean => {
+export const isImageFile = (file: File | null | undefined): boolean => {
+  if (!file || !file.type) return false;
   return file.type.startsWith('image/');
 };
 
 // Check if the file is an audio
-export const isAudioFile = (file: File): boolean => {
+export const isAudioFile = (file: File | null | undefined): boolean => {
+  if (!file || !file.type) return false;
   return file.type.startsWith('audio/');
 };
 
