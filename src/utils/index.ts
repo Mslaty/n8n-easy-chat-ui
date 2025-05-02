@@ -161,15 +161,19 @@ export const sendToWebhook = async (
     
     const data = await response.json();
     
-    // Handle both a direct string response or an object with a message property
+    // Better handling of response formats
     if (typeof data === 'string') {
       return data;
     } else if (data && typeof data.message === 'string') {
       return data.message;
+    } else if (data && typeof data.output === 'string') {
+      return data.output;
     } else if (Array.isArray(data) && data.length > 0) {
       return typeof data[0] === 'string' ? data[0] : 
-             (data[0].message || 'Received response from n8n');
+             (data[0].message || data[0].output || 'Received response from n8n');
     } else {
+      // Inspect the actual response structure for better handling
+      console.log("Response data structure:", JSON.stringify(data));
       return 'Received response from n8n';
     }
   } catch (error) {
