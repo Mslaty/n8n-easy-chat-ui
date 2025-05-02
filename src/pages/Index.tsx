@@ -1,122 +1,27 @@
+
 import React, { useState, useEffect } from 'react';
 import ChatHeader from '../components/ChatHeader';
-import MessageList from '../components/MessageList';
-import MessageInput from '../components/MessageInput';
+import ChatContainer from '../components/ChatContainer';
 import SettingsModal from '../components/SettingsModal';
-import { Message, Attachment, ChatSettings } from '../types';
+import { Attachment, ChatSettings } from '../types';
 import { 
-  generateId, 
-  saveMessages, 
-  getMessages, 
   saveSettings, 
   getSettings,
-  sendToWebhook,
   importChatHistory
 } from '../utils';
+import { downloadAttachment } from '../utils/attachmentHandlers';
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [settings, setSettings] = useState<ChatSettings>(getSettings());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   
-  // Load chat history from localStorage on mount
+  // Check connection status when settings change
   useEffect(() => {
-    // Load saved messages but make sure they don't have isTyping set
-    const savedMessages = getMessages(settings.chatId).map(msg => ({
-      ...msg,
-      isTyping: false // Ensure loaded messages don't have typing animation
-    }));
-    
-    if (savedMessages.length > 0) {
-      setMessages(savedMessages);
-    }
-    
-    // Check if webhook URL is set to determine connection status
     setIsConnected(!!settings.webhookUrl);
-  }, [settings.chatId]);
-  
-  // Save messages to localStorage when they change
-  useEffect(() => {
-    if (messages.length > 0) {
-      saveMessages(messages, settings.chatId)
-        .catch(error => console.error('Failed to save messages:', error));
-    }
-  }, [messages, settings.chatId]);
-  
-  const handleSendMessage = async (messageText: string, attachments: Attachment[]) => {
-    // Create user message
-    const userMessage: Message = {
-      id: generateId(),
-      content: messageText.trim(),
-      sender: 'user',
-      timestamp: Date.now(),
-      attachments
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setIsLoading(true);
-    
-    try {
-      // Create a unique ID for the typing indicator message
-      const typingId = generateId();
-      
-      // Prepare typing indicator message
-      const typingMessage: Message = {
-        id: typingId,
-        content: 'Agent is typing...',
-        sender: 'agent',
-        timestamp: Date.now(),
-        isTyping: false // We don't use isTyping flag here as we always want to show the dots animation
-      };
-      
-      // Always show typing indicator, either as dots animation or with typing effect based on settings
-      setMessages(prev => [...prev, typingMessage]);
-      
-      // Send message to webhook
-      const files = attachments.map(a => a.data).filter(Boolean) as File[];
-      const response = await sendToWebhook(
-        settings.webhookUrl,
-        messageText,
-        files,
-        settings.chatId
-      );
-      
-      // Remove typing indicator
-      setMessages(prev => prev.filter(m => m.id !== typingId));
-      
-      // Add agent response
-      const agentMessage: Message = {
-        id: generateId(),
-        content: response,
-        sender: 'agent',
-        timestamp: Date.now(),
-        // If typing animation is enabled, mark this message for animation
-        // This is a new message, so it should have typing animation if enabled
-        isTyping: settings.typingAnimation
-      };
-      
-      setMessages(prev => [...prev, agentMessage]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      
-      // Remove typing indicator if it exists
-      setMessages(prev => prev.filter(m => m.isTyping));
-      
-      // Add error message
-      const errorMessage: Message = {
-        id: generateId(),
-        content: `Error: ${error instanceof Error ? error.message : 'Failed to send message'}`,
-        sender: 'agent',
-        timestamp: Date.now()
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [settings.webhookUrl]);
   
   const handleSaveSettings = (newSettings: ChatSettings) => {
     setSettings(newSettings);
@@ -127,47 +32,23 @@ const Index = () => {
   const handleCopyMessage = (content: string) => {
     navigator.clipboard.writeText(content)
       .then(() => {
-        // Could show a toast notification here
-        console.log('Message copied to clipboard');
+        toast({
+          title: "Copied!",
+          description: "Message copied to clipboard"
+        });
       })
       .catch(err => {
         console.error('Failed to copy message:', err);
+        toast({
+          title: "Error",
+          description: "Failed to copy message",
+          variant: "destructive"
+        });
       });
   };
   
   const handleDownloadAttachment = (attachment: Attachment) => {
-    if (attachment.url) {
-      // For base64 data URLs
-      if (attachment.url.startsWith('data:')) {
-        const link = document.createElement('a');
-        link.href = attachment.url;
-        link.download = attachment.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } 
-      // For blob URLs
-      else {
-        const link = document.createElement('a');
-        link.href = attachment.url;
-        link.download = attachment.name;
-        link.click();
-      }
-    } else if (attachment.previewUrl) {
-      const link = document.createElement('a');
-      link.href = attachment.previewUrl;
-      link.download = attachment.name;
-      link.click();
-    } else if (attachment.data) {
-      const url = URL.createObjectURL(attachment.data);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = attachment.name;
-      link.click();
-      
-      // Clean up the URL
-      setTimeout(() => URL.revokeObjectURL(url), 100);
-    }
+    downloadAttachment(attachment);
   };
   
   const handleImportChat = (file: File) => {
@@ -189,17 +70,24 @@ const Index = () => {
             setSettings(newSettings);
             saveSettings(newSettings);
             
-            // Load the messages from the imported chat
-            setMessages(importedChat.messages);
-            
             // Close the settings modal
             setIsSettingsOpen(false);
             
-            // Show a message about successful import
-            console.log('Chat history imported successfully');
+            toast({
+              title: "Success",
+              description: "Chat history imported successfully"
+            });
+            
+            // Force reload to load the new chat history
+            window.location.reload();
           }
         } catch (error) {
           console.error('Failed to import chat history:', error);
+          toast({
+            title: "Error",
+            description: "Failed to import chat history",
+            variant: "destructive"
+          });
         }
       }
     };
@@ -222,16 +110,11 @@ const Index = () => {
         onOpenSettings={() => setIsSettingsOpen(true)}
       />
       
-      <MessageList 
-        messages={messages}
+      <ChatContainer 
+        settings={settings}
+        isConnected={isConnected}
         onCopyMessage={handleCopyMessage}
         onDownloadAttachment={handleDownloadAttachment}
-      />
-      
-      <MessageInput 
-        onSendMessage={handleSendMessage}
-        isConnected={isConnected}
-        isLoading={isLoading}
       />
       
       <SettingsModal 
