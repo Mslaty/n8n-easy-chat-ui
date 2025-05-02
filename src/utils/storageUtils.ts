@@ -15,20 +15,18 @@ export const saveMessages = async (messages: Message[], chatId: string): Promise
     const processedAttachments = await Promise.all(message.attachments.map(async attachment => {
       const processed = { ...attachment };
       
-      // Store file data as URL string if available
+      // Store file data as base64 string if available
       if (attachment.data instanceof File) {
         try {
-          // If it's an image that already has a previewUrl, use that
-          if (attachment.previewUrl && attachment.data.type.startsWith('image/')) {
-            processed.url = attachment.previewUrl;
-          } 
-          // For other files, convert to base64
-          else {
-            processed.url = await fileToBase64(attachment.data);
-          }
+          // Always convert to base64 for persistent storage
+          processed.url = await fileToBase64(attachment.data);
         } catch (err) {
           console.error('Failed to convert file to base64:', err);
         }
+      }
+      // If we have a blob URL but no base64 data (e.g., after loading from localStorage)
+      else if (attachment.previewUrl && attachment.previewUrl.startsWith('blob:') && !processed.url) {
+        console.warn('Found blob URL without base64 data, image may not persist after reload');
       }
       
       // Remove the File object as it can't be serialized
