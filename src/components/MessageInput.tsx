@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Paperclip, Send, Mic, Square, File as FileIcon } from 'lucide-react';
 import { Attachment } from '../types';
 import { generateId, createObjectURL, startRecording, stopRecording, isImageFile } from '../utils';
+
 interface MessageInputProps {
   onSendMessage: (message: string, attachments: Attachment[]) => void;
   isConnected: boolean;
   isLoading: boolean;
 }
+
 const MessageInput: React.FC<MessageInputProps> = ({
   onSendMessage,
   isConnected,
@@ -20,6 +22,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const recordingTimerRef = useRef<number | null>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() && attachments.length === 0) return;
@@ -27,20 +30,20 @@ const MessageInput: React.FC<MessageInputProps> = ({
     setMessage('');
     setAttachments([]);
   };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Send message if Enter is pressed without Shift key
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // Prevent default to avoid new line
+      e.preventDefault();
       if (message.trim() || attachments.length > 0) {
         handleSubmit(e as unknown as React.FormEvent);
       }
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newAttachments: Attachment[] = [];
       Array.from(e.target.files).forEach(file => {
-        // Check if file size is less than 10MB for non-image files
         const isImage = isImageFile(file);
         if (!isImage && file.size > 10 * 1024 * 1024) {
           alert(`File ${file.name} exceeds the 10MB limit for non-image files.`);
@@ -60,19 +63,17 @@ const MessageInput: React.FC<MessageInputProps> = ({
       });
       setAttachments(prev => [...prev, ...newAttachments]);
     }
-
-    // Reset the input value to allow selecting the same file again
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
+
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files) {
       const newAttachments: Attachment[] = [];
       Array.from(e.dataTransfer.files).forEach(file => {
-        // Check if file size is less than 10MB for non-image files
         const isImage = isImageFile(file);
         if (!isImage && file.size > 10 * 1024 * 1024) {
           alert(`File ${file.name} exceeds the 10MB limit for non-image files.`);
@@ -93,21 +94,26 @@ const MessageInput: React.FC<MessageInputProps> = ({
       setAttachments(prev => [...prev, ...newAttachments]);
     }
   };
+
   const removeAttachment = (id: string) => {
     setAttachments(prev => prev.filter(a => a.id !== id));
   };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
+
   const handleDragLeave = () => {
     setIsDragging(false);
   };
+
   const formatRecordingTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
+
   const handleRecordToggle = async () => {
     try {
       if (isRecording) {
@@ -119,7 +125,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
         }
         const audioFile = await stopRecording();
         if (audioFile) {
-          // Automatically send the voice message
           const voiceAttachment: Attachment = {
             id: generateId(),
             name: audioFile.name,
@@ -127,8 +132,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
             data: audioFile,
             size: audioFile.size
           };
-
-          // Send the voice message immediately
           onSendMessage('', [voiceAttachment]);
         }
       } else {
@@ -151,7 +154,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
-  // Clear recording timer when component unmounts
   useEffect(() => {
     return () => {
       if (recordingTimerRef.current) {
@@ -160,15 +162,13 @@ const MessageInput: React.FC<MessageInputProps> = ({
     };
   }, []);
 
-  // Adjust textarea height based on content
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [message]);
-  
-  // Determine if send button should be visible
+
   const shouldShowSendButton = message.trim().length > 0 || attachments.length > 0;
 
   return <div className="">
@@ -213,7 +213,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                 type="submit" 
                 disabled={!message.trim() && attachments.length === 0 || !isConnected || isLoading} 
                 aria-label="Send message" 
-                className="text-gray-400 hover:text-white p-2 rounded-full"
+                className="text-gray-400 hover:text-white p-2 rounded-full transition-opacity duration-300 animate-fade-in"
               >
                 <Send size={20} />
               </button>
@@ -229,4 +229,5 @@ const MessageInput: React.FC<MessageInputProps> = ({
       </form>
     </div>;
 };
+
 export default MessageInput;
