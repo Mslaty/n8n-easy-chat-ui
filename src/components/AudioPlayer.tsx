@@ -62,7 +62,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <div className="flex-1 min-w-0">
         <div className="text-sm truncate">Voice message</div>
       </div>
-      <button onClick={() => onDownloadAttachment(attachment)} className="p-1 text-gray-400 hover:text-white">
+      <button onClick={() => onDownloadAttachment(attachment)} className="p-1 text-gray-400 hover:text-white mx-[10px] px-[4px] my-0">
         <Download size={16} />
       </button>
     </div>;
