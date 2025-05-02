@@ -17,8 +17,8 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
   const isVoiceMessage = attachment.data && isAudioFile(attachment.data);
   
   return (
-    <div className="flex items-center p-0 bg-opacity-30 bg-transparent">
-      <Music size={18} className="text-gray-400 mr-2" />
+    <div className="flex items-center px-3 py-2 bg-opacity-30 bg-transparent">
+      <Music size={18} className="text-gray-400 mr-4" />
       <div className="flex-1 min-w-0">
         <div className="text-sm truncate">
           {isVoiceMessage ? "Voice message" : attachment.name}
@@ -31,7 +31,7 @@ const FileAttachment: React.FC<FileAttachmentProps> = ({
       </div>
       <button 
         onClick={() => onDownloadAttachment(attachment)} 
-        className="p-1 text-gray-400 hover:text-white"
+        className="p-2 text-gray-400 hover:text-white ml-4"
       >
         <Download size={16} />
       </button>

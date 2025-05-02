@@ -97,16 +97,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           />
         )}
         
-        <div className="text-xs text-gray-500 mt-1 text-right">
-          {message.timestamp && (
-            <span>
-              {new Date(message.timestamp).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </span>
-          )}
-        </div>
+        {/* Removed timestamps */}
       </div>
       
       {/* Copy button positioned outside the bubble - for agent messages (right side) */}

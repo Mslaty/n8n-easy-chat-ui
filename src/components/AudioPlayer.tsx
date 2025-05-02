@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Play, Pause, Download } from 'lucide-react';
 import { Attachment } from '../types';
+
 interface AudioPlayerProps {
   attachment: Attachment;
   onDownloadAttachment: (attachment: Attachment) => void;
@@ -14,6 +14,7 @@ interface AudioPlayerProps {
     [key: string]: HTMLAudioElement;
   }>>;
 }
+
 const AudioPlayer: React.FC<AudioPlayerProps> = ({
   attachment,
   onDownloadAttachment,
@@ -23,6 +24,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   setAudioElements
 }) => {
   const attachmentId = attachment.id || '';
+  
   const toggleAudioPlayback = () => {
     // If no audio element exists for this attachment, create one
     if (!audioElements[attachmentId] && attachment.data) {
@@ -56,16 +58,28 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       }
     }
   };
-  return <div className="flex items-center p-2 bg-opacity-30 bg-transparent px-[8px] mx-0">
-      <button onClick={toggleAudioPlayback} className="p-2 rounded-full mr-3 text-white bg-white/[0.17]">
+  
+  return (
+    <div className="flex items-center bg-opacity-30 bg-transparent px-3 py-2">
+      <button 
+        onClick={toggleAudioPlayback} 
+        className="p-2.5 rounded-full mr-4 text-white bg-white/[0.17]"
+      >
         {playingAudio === attachmentId ? <Pause size={16} /> : <Play size={16} />}
       </button>
+      
       <div className="flex-1 min-w-0">
         <div className="text-sm truncate">Voice message</div>
       </div>
-      <button onClick={() => onDownloadAttachment(attachment)} className="p-1 text-gray-400 hover:text-white mx-[10px] px-[4px] my-0">
+      
+      <button 
+        onClick={() => onDownloadAttachment(attachment)} 
+        className="p-2 text-gray-400 hover:text-white ml-4"
+      >
         <Download size={16} />
       </button>
-    </div>;
+    </div>
+  );
 };
+
 export default AudioPlayer;
