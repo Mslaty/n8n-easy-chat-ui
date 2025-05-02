@@ -24,9 +24,40 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     [key: string]: HTMLAudioElement;
   }>({});
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const { toast } = useToast();
   
   const isUser = message.sender === 'user';
+  
+  // Handle typing animation effect when message changes
+  useEffect(() => {
+    // Only apply typing animation to agent messages that have the isTyping flag
+    if (message.isTyping && !isUser && message.content) {
+      setIsTyping(true);
+      setDisplayedText('');
+      
+      let index = 0;
+      const content = message.content;
+      
+      // Start the typing animation
+      const interval = setInterval(() => {
+        if (index < content.length) {
+          setDisplayedText((prev) => prev + content.charAt(index));
+          index++;
+        } else {
+          clearInterval(interval);
+          setIsTyping(false);
+        }
+      }, 15); // Typing speed
+      
+      return () => clearInterval(interval);
+    } else {
+      // For regular messages, just show the full content
+      setDisplayedText(message.content || '');
+      setIsTyping(false);
+    }
+  }, [message.content, message.isTyping, isUser]);
   
   const handleCopy = () => {
     onCopyMessage(message.content);
@@ -135,12 +166,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       <div 
         className={`rounded-lg px-4 py-2 max-w-[80%] break-words ${
           isUser ? 'bg-chat-user-bubble text-white' : 'bg-chat-agent-bubble text-gray-200'
-        } ${message.isTyping ? 'animate-pulse' : ''}`}
+        } ${isTyping ? 'animate-pulse' : ''}`}
       >
         {message.content && (
           <div className="mb-2">
-            {message.isTyping ? (
-              <span className="typing-indicator text-sm">{message.content}</span>
+            {isTyping ? (
+              <div className="text-sm typing-animation">
+                {displayedText}
+                <span className="typing-cursor">|</span>
+              </div>
             ) : (
               <div className="markdown-content text-sm">
                 <ReactMarkdown className="prose prose-invert prose-sm max-w-none" components={components}>

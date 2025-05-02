@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import ChatHeader from '../components/ChatHeader';
 import MessageList from '../components/MessageList';
@@ -54,13 +55,16 @@ const Index = () => {
     setIsLoading(true);
     
     try {
+      // Create a unique ID for the typing indicator message
+      const typingId = generateId();
+      
       // Prepare typing indicator message
       const typingMessage: Message = {
-        id: generateId(),
+        id: typingId,
         content: 'Agent is typing...',
         sender: 'agent',
         timestamp: Date.now(),
-        isTyping: settings.typingAnimation
+        isTyping: true
       };
       
       // Show typing indicator if animation is enabled
@@ -79,7 +83,7 @@ const Index = () => {
       
       // Remove typing indicator
       if (settings.typingAnimation) {
-        setMessages(prev => prev.filter(m => m.id !== typingMessage.id));
+        setMessages(prev => prev.filter(m => m.id !== typingId));
       }
       
       // Add agent response
@@ -87,7 +91,9 @@ const Index = () => {
         id: generateId(),
         content: response,
         sender: 'agent',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        // If typing animation is enabled, mark this message for animation
+        isTyping: settings.typingAnimation
       };
       
       setMessages(prev => [...prev, agentMessage]);
@@ -96,7 +102,7 @@ const Index = () => {
       
       // Remove typing indicator if it exists
       if (settings.typingAnimation) {
-        setMessages(prev => prev.filter(m => !m.isTyping));
+        setMessages(prev => prev.filter(m => m.isTyping));
       }
       
       // Add error message
