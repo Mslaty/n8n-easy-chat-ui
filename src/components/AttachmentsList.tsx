@@ -32,7 +32,7 @@ const AttachmentsList: React.FC<AttachmentsListProps> = ({
   return (
     <div className="space-y-2 mt-2">
       {attachments.map(attachment => (
-        <div key={attachment.id || attachment.name} className="">
+        <div key={attachment.id || attachment.name} className="rounded-md overflow-hidden">
           {attachment.previewUrl && isImageFile(attachment.data) ? (
             <ImageAttachment 
               attachment={attachment} 
