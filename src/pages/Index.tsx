@@ -11,11 +11,13 @@ import {
 } from '../utils';
 import { downloadAttachment } from '../utils/attachmentHandlers';
 import { toast } from '@/components/ui/sonner';
+import { useCopyMessage } from '@/hooks/useCopyMessage';
 
 const Index = () => {
   const [settings, setSettings] = useState<ChatSettings>(getSettings());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const { handleCopy } = useCopyMessage();
   
   // Check connection status when settings change
   useEffect(() => {
@@ -29,22 +31,7 @@ const Index = () => {
   };
   
   const handleCopyMessage = (content: string) => {
-    navigator.clipboard.writeText(content)
-      .then(() => {
-        toast("Copied to clipboard", {
-          duration: 2000,
-          className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
-          position: "bottom-right",
-        });
-      })
-      .catch(err => {
-        console.error('Failed to copy message:', err);
-        toast("Failed to copy", {
-          duration: 2000,
-          className: "bg-black/70 text-red-300 text-xs py-1.5 px-3 rounded-md border-0",
-          position: "bottom-right",
-        });
-      });
+    handleCopy(content); // Use the useCopyMessage hook for consistent behavior
   };
   
   const handleDownloadAttachment = (attachment: Attachment) => {
