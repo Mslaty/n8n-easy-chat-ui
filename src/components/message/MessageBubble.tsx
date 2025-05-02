@@ -27,18 +27,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const { displayedText, isTyping } = useTypingAnimation(message, isUser);
   const { copiedCode, handleCopy, handleCopyCode } = useCopyMessage();
 
-  // Force update showActions state when message changes
-  // and reset audio states to ensure clean UI
+  // Reset audio states when message changes
   useEffect(() => {
     resetAudioStates();
-    
-    // Auto-show actions briefly when message appears
-    setShowActions(true);
-    const hideTimer = setTimeout(() => {
-      setShowActions(false);
-    }, 2000);
-    
-    return () => clearTimeout(hideTimer);
   }, [message.id, resetAudioStates]);
 
   // Check if the message only contains voice attachments and no text content
@@ -74,15 +65,16 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         }`}
       >
-        {!message.isTyping && !isOnlyVoiceMessage() && (
+        {/* Only show copy button for agent messages */}
+        {!isUser && !message.isTyping && !isOnlyVoiceMessage() && (
           <div 
-            className={`absolute transition-opacity duration-300 ${
+            className={`absolute top-1 right-1 transition-opacity duration-300 ${
               showActions ? 'opacity-100' : 'opacity-0'
-            } ${isUser ? 'top-1 right-1' : 'top-1 left-1'}`}
-            data-testid={`copy-button-${isUser ? 'user' : 'agent'}`}
+            }`}
+            data-testid="copy-button-agent"
           >
             <CopyButton 
-              position={isUser ? 'right' : 'left'} 
+              position="right" 
               onClick={handleCopyClick} 
             />
           </div>
