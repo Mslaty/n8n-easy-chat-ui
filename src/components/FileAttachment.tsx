@@ -1,0 +1,37 @@
+
+import React from 'react';
+import { Music, Download } from 'lucide-react';
+import { Attachment } from '../types';
+import { formatFileSize } from '../utils';
+
+interface FileAttachmentProps {
+  attachment: Attachment;
+  onDownloadAttachment: (attachment: Attachment) => void;
+}
+
+const FileAttachment: React.FC<FileAttachmentProps> = ({
+  attachment,
+  onDownloadAttachment
+}) => {
+  return (
+    <div className="flex items-center p-0 bg-opacity-30 bg-transparent">
+      <Music size={18} className="text-gray-400 mr-2" />
+      <div className="flex-1 min-w-0">
+        <div className="text-sm truncate">{attachment.name}</div>
+        {attachment.size && (
+          <div className="text-xs text-gray-400">
+            {formatFileSize(attachment.size)}
+          </div>
+        )}
+      </div>
+      <button 
+        onClick={() => onDownloadAttachment(attachment)} 
+        className="p-1 text-gray-400 hover:text-white"
+      >
+        <Download size={16} />
+      </button>
+    </div>
+  );
+};
+
+export default FileAttachment;
