@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Copy, CopyCheck, CircleEllipsis } from 'lucide-react';
 import { Message, Attachment } from '../types';
@@ -186,14 +187,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       )}
       
       <div 
-        className={`rounded-lg px-4 py-2 max-w-[80%] break-words flex items-center ${
+        className={`rounded-lg px-4 py-3 max-w-[80%] break-words flex items-center ${
           isUser ? 'bg-chat-user-bubble text-white justify-center' : 'bg-chat-agent-bubble text-gray-200 justify-start'
         } ${message.content === 'Agent is typing...' ? 'animate-pulse' : ''}`}
       >
         {message.content && message.content === 'Agent is typing...' ? (
           <LoadingDots />
         ) : message.content && (
-          <div className={`mb-2 w-full ${isUser ? 'text-center' : 'text-left'}`}>
+          <div className={`w-full ${isUser ? 'text-center' : 'text-left'}`}>
             {isTyping ? (
               <div className="text-sm typing-animation">
                 {displayedText}
