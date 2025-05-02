@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Play, Pause } from 'lucide-react';
+import { Play, Square } from 'lucide-react';
 import { Attachment } from '../types';
 
 interface AudioPlayerProps {
@@ -58,6 +58,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     if (audio) {
       if (playingAudio === attachmentId) {
         audio.pause();
+        // Reset audio to beginning when stopped
+        audio.currentTime = 0;
         setPlayingAudio(null);
       } else {
         // Pause any currently playing audio
@@ -85,9 +87,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             ? 'text-white bg-chat-accent animate-pulse' 
             : 'text-white bg-white/[0.17]'
         } flex-shrink-0`}
-        aria-label={isPlaying ? 'Pause voice message' : 'Play voice message'}
+        aria-label={isPlaying ? 'Stop voice message' : 'Play voice message'}
       >
-        {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+        {isPlaying ? <Square size={14} /> : <Play size={14} />}
       </button>
       
       <div className={`text-sm ${isPlaying ? 'text-chat-accent' : ''}`}>Voice message</div>
