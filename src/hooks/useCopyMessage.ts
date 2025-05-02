@@ -10,7 +10,7 @@ export const useCopyMessage = () => {
       // Modern approach using Clipboard API with fallback to execCommand
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(content).then(() => {
-          // Use sonner toast for a more compact, semi-transparent dark notification
+          // Use sonner toast for notification
           toast("Copied to clipboard", {
             duration: 2000,
             className: "bg-black/70 text-white text-xs py-1.5 px-3 rounded-md border-0",
