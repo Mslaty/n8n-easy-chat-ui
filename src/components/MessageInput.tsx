@@ -146,7 +146,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         </div>}
       
       <form onSubmit={handleSubmit} className={`relative ${isDragging ? 'drag-over' : ''}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleFileDrop}>
-        <div className="flex items-end bg-chat-dark-secondary rounded-t-lg">
+        <div className="flex items-end bg-chat-dark-secondary rounded-t-lg px-0 mx-[50px]">
           <div className="flex items-center p-2">
             <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50" disabled={!isConnected || isLoading} aria-label="Attach file">
               <Paperclip size={20} />
