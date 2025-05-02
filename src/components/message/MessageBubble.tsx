@@ -71,7 +71,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
             className={`absolute top-1 right-1 transition-opacity duration-300 ${
               showActions ? 'opacity-100' : 'opacity-0'
             }`}
-            style={{ display: 'block' }} {/* Force display to ensure button is always in DOM */}
+            style={{ display: 'block' }} // Force display to ensure button is always in DOM
             data-testid="copy-button-agent"
           >
             <CopyButton 
