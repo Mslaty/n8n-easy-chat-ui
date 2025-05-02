@@ -84,7 +84,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
         onClick={toggleAudioPlayback} 
         className={`p-2 rounded-full mr-3 ${
           isPlaying 
-            ? 'text-white bg-chat-accent animate-pulse' 
+            ? 'text-white bg-chat-accent' 
             : 'text-white bg-white/[0.17]'
         } flex-shrink-0`}
         aria-label={isPlaying ? 'Stop voice message' : 'Play voice message'}
