@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Copy } from 'lucide-react';
+import { Copy, CopyCheck } from 'lucide-react';
 import { Message, Attachment } from '../types';
 import AttachmentsList from './AttachmentsList';
 import { isAudioFile } from '../utils';
 import ReactMarkdown from 'react-markdown';
+import { useToast } from "@/hooks/use-toast";
 
 interface MessageBubbleProps {
   message: Message;
@@ -22,11 +23,37 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const [audioElements, setAudioElements] = useState<{
     [key: string]: HTMLAudioElement;
   }>({});
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const { toast } = useToast();
   
   const isUser = message.sender === 'user';
   
   const handleCopy = () => {
     onCopyMessage(message.content);
+  };
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        setCopiedCode(code);
+        toast({
+          title: "Copied!",
+          description: "Code copied to clipboard"
+        });
+        
+        // Reset copied state after 2 seconds
+        setTimeout(() => {
+          setCopiedCode(null);
+        }, 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy code:', err);
+        toast({
+          title: "Error",
+          description: "Failed to copy code to clipboard",
+          variant: "destructive"
+        });
+      });
   };
 
   // Check if the message only contains voice attachments and no text content
@@ -53,6 +80,41 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
       });
     };
   }, [audioElements]);
+  
+  // Custom renderer for code blocks to add copy button
+  const components = {
+    code: ({ node, inline, className, children, ...props }: any) => {
+      const match = /language-(\w+)/.exec(className || '');
+      const code = String(children).replace(/\n$/, '');
+      
+      if (!inline && code) {
+        const isCopied = copiedCode === code;
+        
+        return (
+          <div className="relative group/code">
+            <pre className={className} {...props}>
+              <code className={className} {...props}>
+                {children}
+              </code>
+            </pre>
+            <button
+              onClick={() => handleCopyCode(code)}
+              className="absolute right-2 top-2 p-1 rounded bg-gray-800/50 text-gray-400 opacity-0 group-hover/code:opacity-100 hover:bg-gray-700/50 hover:text-white transition-opacity"
+              aria-label="Copy code"
+            >
+              {isCopied ? <CopyCheck size={18} /> : <Copy size={18} />}
+            </button>
+          </div>
+        );
+      }
+      
+      return (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    }
+  };
   
   return (
     <div className={`flex mb-4 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in group relative`}
@@ -83,7 +145,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
               <span className="typing-indicator text-sm">{message.content}</span>
             ) : (
               <div className="markdown-content text-sm">
-                <ReactMarkdown className="prose prose-invert prose-sm max-w-none">
+                <ReactMarkdown className="prose prose-invert prose-sm max-w-none" components={components}>
                   {message.content}
                 </ReactMarkdown>
               </div>
