@@ -65,8 +65,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
           {attachments.map((attachment) => (
             <AttachmentPreview
               key={attachment.id}
-              attachment={attachment}
-              onRemove={() => handleRemoveAttachment(attachment.id)}
+              attachments={[attachment]}
+              onRemove={handleRemoveAttachment}
             />
           ))}
         </div>
