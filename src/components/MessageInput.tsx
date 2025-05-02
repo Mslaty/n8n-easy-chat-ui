@@ -6,7 +6,6 @@ import AttachmentButton from './input/AttachmentButton';
 import VoiceRecordButton from './input/VoiceRecordButton';
 import SendButton from './input/SendButton';
 import AttachmentPreview from './input/AttachmentPreview';
-import DropZone from './input/DropZone';
 
 interface MessageInputProps {
   onSendMessage: (message: string, attachments: Attachment[]) => void;
@@ -56,13 +55,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onDragLeave={handleDragLeave} 
         onDrop={handleFileDrop}
       >
-        <DropZone 
-          isDragging={isDragging}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleFileDrop}
-        />
-        
         <div className="flex bg-chat-dark-secondary rounded-t-lg mx-[50px] px-[5px] my-0 py-[5px] border-t border-l border-r border-gray-700">
           {/* Left side (attachment button) */}
           <div className="flex pt-2 items-start">
@@ -109,6 +101,12 @@ const MessageInput: React.FC<MessageInputProps> = ({
           className="hidden" 
           multiple 
         />
+        
+        {isDragging && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+            <p className="text-white">Drop files here</p>
+          </div>
+        )}
       </form>
     </div>
   );

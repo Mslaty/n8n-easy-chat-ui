@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FileUp } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
 
 interface AttachmentButtonProps {
   onClick: () => void;
@@ -12,12 +12,11 @@ const AttachmentButton: React.FC<AttachmentButtonProps> = ({ onClick, disabled }
     <button 
       type="button" 
       onClick={onClick} 
-      className="p-2 text-gray-400 hover:text-chat-accent transition-colors rounded-full disabled:opacity-50 disabled:hover:text-gray-400" 
+      className="p-2 text-gray-400 hover:text-white rounded-full disabled:opacity-50" 
       disabled={disabled} 
       aria-label="Attach file"
-      title="Attach files"
     >
-      <FileUp size={20} />
+      <Paperclip size={20} />
     </button>
   );
 };
