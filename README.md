@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/07cf5481-f4cb-488b-9152-8731e744e0db
+**Try it**: https://n8n-easy-chat-ui.vercel.app
 
 ## How can I edit this code?
 
@@ -62,7 +62,7 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/07cf5481-f4cb-488b-9152-8731e744e0db) and click on Share -> Publish.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsimplpear%2Fn8n-easy-chat-ui%2Ftree%2Fmain)
 
 ## Can I connect a custom domain to my Lovable project?
 
