@@ -39,18 +39,21 @@ export const sendToWebhook = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    // Check if the response has content
-    const contentType = response.headers.get('content-type');
+    // Get the raw response text first
+    const responseText = await response.text();
     
-    // If the response is empty or not JSON, handle it gracefully
-    if (response.status === 204 || !contentType || !contentType.includes('application/json')) {
-      console.log('Received non-JSON response:', await response.text());
-      return 'Request processed successfully';
+    // Log the raw response for debugging
+    console.log('Raw webhook response:', responseText);
+    
+    // Check if the response is empty
+    if (!responseText || responseText.trim() === '') {
+      return 'Request processed successfully, but no response data was returned';
     }
     
-    // Try to parse as JSON, with better error handling
+    // Try to parse the response as JSON
     try {
-      const data = await response.json();
+      // Only try to parse if there's actual content
+      const data = responseText ? JSON.parse(responseText) : null;
       
       // Better handling of response formats
       if (typeof data === 'string') {
@@ -62,14 +65,24 @@ export const sendToWebhook = async (
       } else if (Array.isArray(data) && data.length > 0) {
         return typeof data[0] === 'string' ? data[0] : 
                (data[0].message || data[0].output || 'Received response from webhook');
-      } else {
+      } else if (data) {
         // Inspect the actual response structure for better handling
         console.log("Response data structure:", JSON.stringify(data));
-        return 'Received response from webhook';
+        return 'Received structured response from webhook';
+      } else {
+        return 'Request processed successfully';
       }
     } catch (parseError) {
+      // If we can't parse the response as JSON, return the raw text (truncated if too long)
       console.error('Error parsing JSON response:', parseError);
-      return 'Request received but response format was unexpected';
+      
+      // Return the raw text if it's reasonably sized, otherwise truncate it
+      if (responseText.length <= 500) {
+        return `Response: ${responseText}`;
+      } else {
+        // Truncate long responses
+        return `Response: ${responseText.substring(0, 500)}... (truncated)`;
+      }
     }
   } catch (error) {
     console.error('Failed to send message:', error);
