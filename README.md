@@ -1,5 +1,7 @@
 ## Project info
 
+Created with Lovable.
+
 **Try it**: https://n8n-easy-chat-ui.vercel.app
 
 ## How can I edit this code?
