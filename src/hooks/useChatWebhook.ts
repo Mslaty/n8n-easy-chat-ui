@@ -57,17 +57,27 @@ export const useChatWebhook = (webhookUrl: string, chatId: string, typingAnimati
       console.error('Error sending message:', error);
       
       // Remove typing indicator if it exists
-      setMessages(prev => prev.filter(m => m.isTyping));
+      setMessages(prev => prev.filter(m => !m.content || m.content !== 'Agent is typing...'));
+      
+      // Add specific error message for network errors
+      let errorMessage = 'Failed to send message';
+      if (error instanceof Error) {
+        if (error.message.includes('NetworkError') || error.message.includes('network')) {
+          errorMessage = 'Network error: Cannot connect to the webhook. Please check your internet connection and webhook URL.';
+        } else {
+          errorMessage = `Error: ${error.message}`;
+        }
+      }
       
       // Add error message
-      const errorMessage: Message = {
+      const errorMsg: Message = {
         id: generateId(),
-        content: `Error: ${error instanceof Error ? error.message : 'Failed to send message'}`,
+        content: errorMessage,
         sender: 'agent',
         timestamp: Date.now()
       };
       
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }

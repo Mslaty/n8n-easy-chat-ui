@@ -24,10 +24,16 @@ export const sendToWebhook = async (
       });
     }
     
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
     const response = await fetch(webhookUrl, {
       method: 'POST',
       body: formData,
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -52,6 +58,14 @@ export const sendToWebhook = async (
     }
   } catch (error) {
     console.error('Failed to send message:', error);
+    
+    // Improve error message for network-related errors
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('Request timed out. The webhook server might be unavailable.');
+    } else if (error instanceof TypeError && error.message.includes('NetworkError')) {
+      throw new Error('Network error: Cannot connect to the webhook. Please check your internet connection and webhook URL.');
+    }
+    
     throw error;
   }
 };
