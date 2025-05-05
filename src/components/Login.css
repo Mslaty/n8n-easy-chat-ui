@@ -1,0 +1,27 @@
+/* Estilos para Login.tsx - Puedes añadir reglas aquí más tarde */
+.login-container {
+    /* Ejemplo: */
+    /* max-width: 400px; */
+    /* margin: 50px auto; */
+    /* padding: 20px; */
+    /* border: 1px solid #ccc; */
+    /* border-radius: 8px; */
+}
+
+.login-form .form-group {
+   /* Ejemplo: */
+    /* margin-bottom: 15px; */
+}
+
+.error-message {
+     /* Ejemplo: */
+    /* color: red; */
+    /* font-size: 0.9em; */
+    /* margin-top: 10px; */
+}
+
+.login-button {
+     /* Ejemplo: */
+    /* padding: 10px 15px; */
+    /* cursor: pointer; */
+}
